@@ -958,7 +958,7 @@ function checkKakaoTalk() {
     // 안드로이드 카카오톡 자동 탈출 (Chrome 브라우저로 실행 유도)
     if (ua.indexOf('android') > -1) {
       const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-      window.location.href = 'intent://' + currentUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+      window.location.href = 'intent://' + currentUrl + '#Intent;scheme=https;end';
       return;
     }
     
