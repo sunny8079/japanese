@@ -293,6 +293,48 @@
       color: var(--accent);
       margin-left: auto;
     }
+
+    /* ── 위로가기 버튼 ── */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 24px;
+      z-index: 900;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(216,67,21,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s, transform 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+    .scroll-top-btn.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .scroll-top-btn:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+    }
+    @media (max-width: 768px) {
+      .scroll-top-btn {
+        bottom: 24px;
+        right: 18px;
+        width: 52px;
+        height: 52px;
+        font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -308,7 +350,6 @@
 <header>
   <span class="header-emoji">🌸</span>
   <h1>엄마의 일본 여행 회화</h1>
-  <p>카드를 누르면 발음을 들을 수 있어요 🔊</p>
 </header>
 
 <!-- 팁 배너 -->
@@ -343,6 +384,9 @@
 
 <!-- 토스트 -->
 <div class="toast" id="toast">🔊 재생 중...</div>
+
+<!-- 위로가기 버튼 -->
+<button class="scroll-top-btn" id="scrollTopBtn" aria-label="위로 가기" title="맨 위로">⬆</button>
 
 <script>
 // ──────────────────────────────────────────────
@@ -574,40 +618,9 @@ function getFilteredPhrases() {
 }
 
 // ──────────────────────────────────────────────
-// TTS
+// TTS (Google 번역 TTS - 모든 브라우저 호환)
 // ──────────────────────────────────────────────
-let jaVoice = null;
-let voicesLoaded = false;
-
-function findJapaneseVoice() {
-  const voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-
-  // 우선순위: ja-JP 네이티브 음성 > ja 음성
-  const preferred = voices.filter(v => v.lang === 'ja-JP' || v.lang === 'ja');
-  if (preferred.length > 0) {
-    // 로컬 음성 우선 (더 자연스러움)
-    const local = preferred.find(v => v.localService === true);
-    return local || preferred[0];
-  }
-  return null;
-}
-
-function initVoices() {
-  jaVoice = findJapaneseVoice();
-  voicesLoaded = true;
-  if (jaVoice) {
-    console.log('일본어 음성:', jaVoice.name, jaVoice.lang);
-  } else {
-    console.warn('일본어 음성을 찾을 수 없습니다');
-  }
-}
-
-// 음성 목록 로드 (브라우저에 따라 비동기일 수 있음)
-if (window.speechSynthesis) {
-  initVoices();
-  window.speechSynthesis.onvoiceschanged = initVoices;
-}
+let currentAudio = null;
 
 function cleanTextForTTS(text) {
   // 괄호 안의 읽기(ふりがな) 제거: 十円（じゅうえん）→ 十円
@@ -620,29 +633,63 @@ function cleanTextForTTS(text) {
 }
 
 function speak(text, card) {
-  if (!window.speechSynthesis) {
-    showToast('이 브라우저는 음성을 지원하지 않아요');
-    return;
-  }
-  window.speechSynthesis.cancel();
-
   const cleanText = cleanTextForTTS(text);
-  const utter = new SpeechSynthesisUtterance(cleanText);
-  utter.lang = 'ja-JP';
-  utter.rate = 0.8;
-  utter.pitch = 1.0;
-
-  // 일본어 음성 명시적 지정
-  if (!voicesLoaded) initVoices();
-  if (jaVoice) {
-    utter.voice = jaVoice;
+  
+  // 이전 오디오 정지
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
   }
 
   card.classList.add('playing');
   showToast('🔊 재생 중...');
-  utter.onend = () => {
+
+  // Google 번역 TTS 사용 (모든 브라우저에서 동작)
+  const encoded = encodeURIComponent(cleanText);
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob&ttsspeed=0.8`;
+  
+  const audio = new Audio(url);
+  currentAudio = audio;
+  
+  audio.onended = () => {
     card.classList.remove('playing');
+    currentAudio = null;
   };
+  
+  audio.onerror = () => {
+    // Google TTS 실패 시 브라우저 내장 TTS로 대체
+    console.warn('Google TTS 실패, 내장 TTS로 대체');
+    speakFallback(cleanText, card);
+  };
+  
+  audio.play().catch(() => {
+    // 자동재생 차단 등의 이유로 실패 시 내장 TTS로 대체
+    speakFallback(cleanText, card);
+  });
+}
+
+// 내장 TTS 대체 (Google TTS 실패 시)
+function speakFallback(text, card) {
+  if (!window.speechSynthesis) {
+    card.classList.remove('playing');
+    showToast('⚠️ 음성을 재생할 수 없어요');
+    return;
+  }
+  
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  utter.rate = 0.8;
+  utter.pitch = 1.0;
+
+  // 일본어 음성 찾기
+  const voices = window.speechSynthesis.getVoices();
+  const jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja');
+  if (jaVoice) utter.voice = jaVoice;
+
+  utter.onend = () => card.classList.remove('playing');
   utter.onerror = () => {
     card.classList.remove('playing');
     showToast('⚠️ 음성 재생에 실패했어요');
@@ -741,6 +788,21 @@ document.getElementById('searchInput').addEventListener('input', e => {
 // ──────────────────────────────────────────────
 renderCategories();
 renderPhrases();
+
+// ──────────────────────────────────────────────
+// 위로가기 버튼
+// ──────────────────────────────────────────────
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    scrollTopBtn.classList.add('visible');
+  } else {
+    scrollTopBtn.classList.remove('visible');
+  }
+});
+scrollTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 </script>
 </body>
 </html>
