@@ -335,6 +335,30 @@
         font-size: 1.4rem;
       }
     }
+
+    /* ── 카카오톡 인앱 브라우저 안내 배너 ── */
+    .kakaotalk-notice {
+      background: linear-gradient(135deg, #FFE082, #FFD54F);
+      border-bottom: 2px solid #FFC107;
+      color: #5D4037;
+      padding: 16px 20px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: center;
+      position: relative;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      animation: slideDown 0.4s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    .kakaotalk-notice .highlight {
+      color: #E65100;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -924,6 +948,38 @@ window.addEventListener('scroll', () => {
 scrollTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+// ──────────────────────────────────────────────
+// 카카오톡 인앱 브라우저 대응
+// ──────────────────────────────────────────────
+function checkKakaoTalk() {
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('kakaotalk') > -1) {
+    // 안드로이드 카카오톡 자동 탈출 (Chrome 브라우저로 실행 유도)
+    if (ua.indexOf('android') > -1) {
+      const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+      window.location.href = 'intent://' + currentUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+      return;
+    }
+    
+    // 아이폰(iOS) 또는 자동 탈출 실패 시 최상단에 안내 배너 표시
+    const body = document.body;
+    const banner = document.createElement('div');
+    banner.className = 'kakaotalk-notice';
+    banner.innerHTML = `
+      <div style="margin-bottom: 4px;">
+        🌸 카카오톡 브라우저에서는 <span class="highlight">일본어 발음 소리가 들리지 않습니다.</span>
+      </div>
+      <div style="font-size: 0.95rem; font-weight: 500; opacity: 0.9;">
+        우측 하단의 메뉴(<span style="font-weight:700;">···</span> 또는 <span style="font-weight:700;">⋮</span>)를 누르고 
+        <span class="highlight" style="text-decoration: underline;">'다른 브라우저로 열기'</span>를 선택해 주세요!
+      </div>
+    `;
+    body.insertBefore(banner, body.firstChild);
+  }
+}
+
+checkKakaoTalk();
 </script>
 </body>
 </html>
