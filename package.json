@@ -1,0 +1,10 @@
+{
+  "name": "japanese-travel-conversation",
+  "version": "1.0.0",
+  "description": "일본 여행을 위한 기초 일본어 회화 가이드",
+  "main": "index.html",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

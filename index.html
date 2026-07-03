@@ -7,6 +7,19 @@
   <meta name="description" content="일본 여행을 위한 기초 일본어 회화 가이드 - 상황별 단어와 문장" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- 구글 애널리틱스 4 (GA4) 및 애드센스 (사이트 공개 시 주석을 풀고 G-XXXXXXXXXX 및 ca-pub-XXXX 등을 본인 코드로 채우세요) -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  -->
+
   <style>
     :root {
       --bg: #FFF9F0;
@@ -336,6 +349,76 @@
       }
     }
 
+    /* ── 애드센스 광고 배너 영역 ── */
+    .adsense-banner {
+      max-width: 900px;
+      margin: 0 auto 28px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    /* ── 네이티브 제휴 광고 카드 스타일 ── */
+    .promo-card {
+      background: linear-gradient(135deg, #FFF8E1, #FFF3E0);
+      border: 2px dashed #FFB74D;
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      grid-column: 1 / -1; /* 그리드 전체 가로 스팬 */
+      transition: all 0.25s;
+    }
+    .promo-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(230,81,0,0.12);
+    }
+    .promo-badge {
+      position: absolute; top: 16px; right: 20px;
+      background: rgba(230,81,0,0.1);
+      color: #E65100;
+      font-size: 0.8rem; font-weight: 700;
+      padding: 4px 10px; border-radius: 50px;
+    }
+    .promo-title {
+      font-size: 1.2rem; font-weight: 700;
+      color: #E65100; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+      padding-right: 60px; /* 뱃지와 겹치지 않게 */
+    }
+    .promo-desc {
+      font-size: 0.95rem; color: var(--text-sub);
+      line-weight: 1.5; margin-bottom: 16px;
+    }
+    .promo-btn {
+      background: #E65100;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      align-self: flex-start;
+      box-shadow: 0 2px 6px rgba(230,81,0,0.25);
+    }
+    .promo-btn:hover {
+      background: #BF360C;
+    }
+    @media (max-width: 768px) {
+      .promo-card { padding: 20px; }
+      .promo-title { font-size: 1.1rem; }
+      .promo-desc { font-size: 0.88rem; }
+      .promo-btn { padding: 9px 18px; font-size: 0.9rem; }
+    }
+
     /* ── 카카오톡 인앱 브라우저 안내 배너 ── */
     .kakaotalk-notice {
       background: linear-gradient(135deg, #FFE082, #FFD54F);
@@ -394,6 +477,21 @@
 
 <!-- 메인 콘텐츠 -->
 <main>
+  <!-- 구글 애드센스 본문 배너 (애드센스 통과 후 주석 해제하여 사용하세요) -->
+  <!--
+  <div class="adsense-banner">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="YYYYYYYYYY"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  -->
+
   <div class="section-title">
     <span class="icon" id="sectionIcon">🗂️</span>
     <span id="sectionLabel">전체</span>
@@ -754,8 +852,33 @@ function speak(text, card) {
   card.classList.add('playing');
   showToast('🔊 재생 중...');
 
-  // 1. Google Translate TTS (GTX 클라이언트) 우선 시도 (가장 자연스럽고 기기 무관 안정적)
-  speakWithGoogle(cleanText, card);
+  // 1. 공식 Google Cloud TTS API (Vercel 서버리스 백엔드) 우선 시도
+  speakWithOfficialTTS(cleanText, card);
+}
+
+function speakWithOfficialTTS(text, card) {
+  const encoded = encodeURIComponent(text);
+  // 로컬 백엔드 서버리스 API 호출
+  const url = `/api/tts?text=${encoded}`;
+  
+  const audio = document.createElement('audio');
+  audio.src = url;
+  currentAudio = audio;
+  
+  audio.onended = () => {
+    if (!isStopping) card.classList.remove('playing');
+    currentAudio = null;
+  };
+  audio.onerror = () => {
+    if (isStopping) return;
+    currentAudio = null;
+    // 공식 TTS 실패 시 2차로 구글 번역 TTS (gtx) 시도
+    speakWithGoogle(text, card);
+  };
+  audio.play().catch(() => {
+    if (isStopping) return;
+    speakWithGoogle(text, card);
+  });
 }
 
 function speakWithGoogle(text, card) {
@@ -774,7 +897,7 @@ function speakWithGoogle(text, card) {
   audio.onerror = () => {
     if (isStopping) return;
     currentAudio = null;
-    // gtx 실패 시 tw-ob 클라이언트로 2차 구글 TTS 시도
+    // gtx 실패 시 tw-ob 클라이언트로 3차 구글 TTS 시도
     speakWithGoogleFallback(text, card);
   };
   audio.play().catch(() => {
@@ -881,6 +1004,39 @@ function renderCategories() {
   });
 }
 
+// ──────────────────────────────────────────────
+// 제휴 광고 데이터 매핑
+// ──────────────────────────────────────────────
+function getAffiliateCard(catId) {
+  const ads = {
+    transport: {
+      title: '🚃 일본 지하철/신칸센 패스 최저가 예매',
+      desc: '도쿄 메트로 패스, 오사카 주유패스, JR 패스 등 여행에 필수적인 일본 교통권을 가장 할인된 금액으로 준비해 보세요!',
+      btnText: '교통 패스 할인가로 구매하기 (클룩 제휴)',
+      url: 'https://www.klook.com/ko/select-destination/japan-travel-passes/'
+    },
+    hotel: {
+      title: '🏨 일본 인기 도시 실시간 숙박 특가',
+      desc: '도쿄, 오사카, 후쿠오카, 삿포로 등 아고다에서 제휴 특별 할인가로 최고의 호텔/료칸을 지금 예약하세요.',
+      btnText: '실시간 아고다 호텔 예약 바로가기',
+      url: 'https://www.agoda.com/ko-kr/country/japan.html'
+    },
+    shopping: {
+      title: '📶 로밍보다 싼 일본 무제한 eSIM 1초 개통',
+      desc: '유심 갈아 끼울 필요 없이 일본 현지 공항에 내리자마자 바로 개통되는 가장 빠르고 편리한 데이터 eSIM 상품입니다.',
+      btnText: 'eSIM 최저가 알아보기 (클룩 제휴)',
+      url: 'https://www.klook.com/ko/activity/82437-japan-esim/'
+    },
+    money: {
+      title: '🪙 일본 여행 필수 준비물 모음전',
+      desc: '여권 파우치, 110V 돼지코 어댑터, 동전 전용 지갑 등 일본 여행을 더욱 편리하게 해주는 준비물들을 로켓배송으로 만나보세요.',
+      btnText: '여행 필수품 최저가 구매 (쿠팡 제휴)',
+      url: 'https://link.coupang.com/'
+    }
+  };
+  return ads[catId] || null;
+}
+
 function renderPhrases() {
   const grid = document.getElementById('phrasesGrid');
   const empty = document.getElementById('emptyState');
@@ -901,6 +1057,23 @@ function renderPhrases() {
     return;
   }
   empty.style.display = 'none';
+
+  // ── [제휴 광고 카드 삽입] ──
+  // 검색 중이 아닐 때만 카테고리별 맞춤형 제휴 카드를 삽입합니다.
+  if (!searchQuery) {
+    const promo = getAffiliateCard(currentCat);
+    if (promo) {
+      const promoCard = document.createElement('div');
+      promoCard.className = 'promo-card';
+      promoCard.innerHTML = `
+        <span class="promo-badge">추천 제휴</span>
+        <div class="promo-title">${promo.title}</div>
+        <div class="promo-desc">${promo.desc}</div>
+        <a href="${promo.url}" target="_blank" rel="noopener noreferrer" class="promo-btn">${promo.btnText}</a>
+      `;
+      grid.appendChild(promoCard);
+    }
+  }
 
   phrases.forEach(p => {
     const card = document.createElement('div');
