@@ -576,21 +576,76 @@ function getFilteredPhrases() {
 // ──────────────────────────────────────────────
 // TTS
 // ──────────────────────────────────────────────
+let jaVoice = null;
+let voicesLoaded = false;
+
+function findJapaneseVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+
+  // 우선순위: ja-JP 네이티브 음성 > ja 음성
+  const preferred = voices.filter(v => v.lang === 'ja-JP' || v.lang === 'ja');
+  if (preferred.length > 0) {
+    // 로컬 음성 우선 (더 자연스러움)
+    const local = preferred.find(v => v.localService === true);
+    return local || preferred[0];
+  }
+  return null;
+}
+
+function initVoices() {
+  jaVoice = findJapaneseVoice();
+  voicesLoaded = true;
+  if (jaVoice) {
+    console.log('일본어 음성:', jaVoice.name, jaVoice.lang);
+  } else {
+    console.warn('일본어 음성을 찾을 수 없습니다');
+  }
+}
+
+// 음성 목록 로드 (브라우저에 따라 비동기일 수 있음)
+if (window.speechSynthesis) {
+  initVoices();
+  window.speechSynthesis.onvoiceschanged = initVoices;
+}
+
+function cleanTextForTTS(text) {
+  // 괄호 안의 읽기(ふりがな) 제거: 十円（じゅうえん）→ 十円
+  let cleaned = text.replace(/（[^）]*）/g, '');
+  // 반각 괄호도 제거
+  cleaned = cleaned.replace(/\([^)]*\)/g, '');
+  // 숫자 / 한자 형태 정리: "一 / 1" → "一"  (숫자 부분 제거)
+  cleaned = cleaned.replace(/\s*\/\s*\d+/g, '');
+  return cleaned.trim();
+}
+
 function speak(text, card) {
   if (!window.speechSynthesis) {
     showToast('이 브라우저는 음성을 지원하지 않아요');
     return;
   }
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+
+  const cleanText = cleanTextForTTS(text);
+  const utter = new SpeechSynthesisUtterance(cleanText);
   utter.lang = 'ja-JP';
-  utter.rate = 0.85;
+  utter.rate = 0.8;
   utter.pitch = 1.0;
+
+  // 일본어 음성 명시적 지정
+  if (!voicesLoaded) initVoices();
+  if (jaVoice) {
+    utter.voice = jaVoice;
+  }
 
   card.classList.add('playing');
   showToast('🔊 재생 중...');
   utter.onend = () => {
     card.classList.remove('playing');
+  };
+  utter.onerror = () => {
+    card.classList.remove('playing');
+    showToast('⚠️ 음성 재생에 실패했어요');
   };
   window.speechSynthesis.speak(utter);
 }
