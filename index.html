@@ -399,6 +399,27 @@ const categories = [
     icon: '🗂️',
   },
   {
+    id: 'useful',
+    label: '유용한 표현',
+    icon: '✨',
+    phrases: [
+      { ko: '네', ja: 'はい', rom: '하이' },
+      { ko: '아니요', ja: 'いいえ', rom: '이이에' },
+      { ko: '모르겠어요', ja: 'わかりません', rom: '와카리마센' },
+      { ko: '~은/는 어디에 있나요?', ja: '〜はどこですか？', tts: 'はどこですか', rom: '~와 도코데스카?' },
+      { ko: '~를/을 주세요', ja: '〜をください', tts: 'をください', rom: '~오 쿠다사이' },
+      { ko: '잠깐만요', ja: 'ちょっと待ってください', tts: 'ちょっとまってください', rom: '쵸또 맛테 쿠다사이' },
+      { ko: '한번 더 말씀해 주세요', ja: 'もう一度言ってください', tts: 'もういちどいってください', rom: '모 이치도 잇테 쿠다사이' },
+      { ko: '천천히 말씀해 주세요', ja: 'ゆっくり話してください', tts: 'ゆっくりはなしてください', rom: '윳쿠리 하나시테 쿠다사이' },
+      { ko: '영어 할 수 있나요?', ja: '英語はできますか？', tts: 'えいごはできますか', rom: '에이고와 데키마스카?' },
+      { ko: '얼마나 걸려요?', ja: 'どのくらいかかりますか？', rom: '도노쿠라이 카카리마스카?' },
+      { ko: '좋아요', ja: 'いいですよ', rom: '이이데스요' },
+      { ko: '비싸요', ja: '高いです', tts: 'たかいです', rom: '타카이데스' },
+      { ko: '싸요', ja: '安いです', tts: 'やすいです', rom: '야스이데스' },
+      { ko: '맵지 않아요', ja: '辛くないです', tts: 'からくないです', rom: '카라쿠나이데스' },
+    ]
+  },
+  {
     id: 'greet',
     label: '인사',
     icon: '👋',
@@ -407,12 +428,16 @@ const categories = [
       { ko: '안녕히 계세요 / 잘 있어', ja: 'さようなら', rom: '사요나라' },
       { ko: '감사합니다', ja: 'ありがとうございます', rom: '아리가토 고자이마스' },
       { ko: '천만에요', ja: 'どういたしまして', rom: '도이타시마시테' },
-      { ko: '실례합니다 / 죄송합니다', ja: 'すみません', rom: '스미마센' },
-      { ko: '미안합니다', ja: 'ごめんなさい', rom: '고멘나사이' },
-      { ko: '좋은 아침이에요', ja: 'おはようございます', rom: '오하요 고자이마스' },
-      { ko: '안녕히 주무세요', ja: 'おやすみなさい', rom: '오야스미나사이' },
-      { ko: '처음 뵙겠습니다', ja: 'はじめまして', rom: '하지메마시테' },
-      { ko: '잘 부탁드립니다', ja: 'よろしくおねがいします', rom: '요로시쿠 오네가이시마스' },
+      { ko: '안녕하세요', ja: 'こんにちは', tts: 'こんにちは', rom: '콘니치와' },
+      { ko: '안녕히 계세요 / 잘 있어', ja: 'さようなら', tts: 'さようなら', rom: '사요나라' },
+      { ko: '감사합니다', ja: 'ありがとうございます', tts: 'ありがとうございます', rom: '아리가토 고자이마스' },
+      { ko: '천만에요', ja: 'どういたしまして', tts: 'どういたしまして', rom: '도이타시마시테' },
+      { ko: '실례합니다 / 죄송합니다', ja: 'すみません', tts: 'すみません', rom: '스미마센' },
+      { ko: '미안합니다', ja: 'ごめんなさい', tts: 'ごめんなさい', rom: '고멘나사이' },
+      { ko: '좋은 아침이에요', ja: 'おはようございます', tts: 'おはようございます', rom: '오하요 고자이마스' },
+      { ko: '안녕히 주무세요', ja: 'おやすみなさい', tts: 'おやすみなさい', rom: '오야스미나사이' },
+      { ko: '처음 뵙겠습니다', ja: 'はじめまして', tts: 'はじめまして', rom: '하지메마시테' },
+      { ko: '잘 부탁드립니다', ja: 'よろしくおねがいします', tts: 'よろしくおねがいします', rom: '요로시쿠 오네가이시마스' },
     ]
   },
   {
@@ -420,16 +445,16 @@ const categories = [
     label: '교통',
     icon: '🚃',
     phrases: [
-      { ko: '~ 역은 어디에 있나요?', ja: '〜駅はどこですか？', rom: '~에키와 도코데스카?' },
-      { ko: '~ 까지 얼마예요?', ja: '〜までいくらですか？', rom: '~마데 이쿠라데스카?' },
-      { ko: '~ 까지 가주세요', ja: '〜まで行ってください', rom: '~마데 잇테 쿠다사이' },
-      { ko: '이 버스는 ~ 에 가나요?', ja: 'このバスは〜に行きますか？', rom: '코노 바스와 ~니 이키마스카?' },
-      { ko: '여기서 내려 주세요', ja: 'ここで降ろしてください', rom: '코코데 오로시테 쿠다사이' },
-      { ko: '신칸센 표를 사고 싶어요', ja: '新幹線のチケットを買いたいです', rom: '신칸센노 치켓토오 카이타이데스' },
-      { ko: '이 열차는 ~ 에 멈추나요?', ja: 'この電車は〜に止まりますか？', rom: '코노 덴샤와 ~니 토마리마스카?' },
-      { ko: '지하철 노선도 있나요?', ja: '地下鉄の路線図はありますか？', rom: '치카테쓰노 로센즈와 아리마스카?' },
-      { ko: '택시 불러 주세요', ja: 'タクシーを呼んでください', rom: '타쿠시오 욘데 쿠다사이' },
-      { ko: '공항까지 가주세요', ja: '空港まで行ってください', rom: '쿠코마데 잇테 쿠다사이' },
+      { ko: '~ 역은 어디에 있나요?', ja: '〜駅はどこですか？', tts: 'えきはどこですか', rom: '~에키와 도코데스카?' },
+      { ko: '~ 까지 얼마예요?', ja: '〜までいくらですか？', tts: 'までいくらですか', rom: '~마데 이쿠라데스카?' },
+      { ko: '~ 까지 가주세요', ja: '〜まで行ってください', tts: 'までいってください', rom: '~마데 잇테 쿠다사이' },
+      { ko: '이 버스는 ~ 에 가나요?', ja: 'このバスは〜に行きますか？', tts: 'このバスはどこにいきますか', rom: '코노 바스와 ~니 이키마스카?' },
+      { ko: '여기서 내려 주세요', ja: 'ここで降ろしてください', tts: 'ここでおろしてください', rom: '코코데 오로시테 쿠다사이' },
+      { ko: '신칸센 표를 사고 싶어요', ja: '新幹線のチケットを買いたいです', tts: 'しんかんせんのチケットをかいたいです', rom: '신칸센노 치켓토오 카이타이데스' },
+      { ko: '이 열차는 ~ 에 멈추나요?', ja: 'この電車は〜に止まりますか？', tts: 'このでんしゃはどこにとまりますか', rom: '코노 덴샤와 ~니 토마리마스카?' },
+      { ko: '지하철 노선도 있나요?', ja: '地下鉄の路線図はありますか？', tts: 'ちかてつのろせんずはありますか', rom: '지하철노 로센즈와 아리마스카?' },
+      { ko: '택시 불러 주세요', ja: 'タクシーを呼んでください', tts: 'タクシーをよんでください', rom: '타쿠시오 욘데 쿠다사이' },
+      { ko: '공항까지 가주세요', ja: '空港まで行ってください', tts: 'くうこうまでいってください', rom: '쿠코마데 잇테 쿠다사이' },
     ]
   },
   {
@@ -457,15 +482,15 @@ const categories = [
       { ko: '메뉴판 주세요', ja: 'メニューをください', rom: '메뉴오 쿠다사이' },
       { ko: '이것으로 주세요', ja: 'これをください', rom: '코레오 쿠다사이' },
       { ko: '맛있어요!', ja: 'おいしい！', rom: '오이시이!' },
-      { ko: '물 주세요', ja: 'お水をください', rom: '오미즈오 쿠다사이' },
-      { ko: '계산해 주세요', ja: 'お会計をお願いします', rom: '오카이케이오 오네가이시마스' },
-      { ko: '이거 하나 더 주세요', ja: 'これをもう一つください', rom: '코레오 모 히토쓰 쿠다사이' },
-      { ko: '맵지 않게 해주세요', ja: '辛くしないでください', rom: '카라쿠 시나이데 쿠다사이' },
+      { ko: '물 주세요', ja: 'お水をください', tts: 'おみずをください', rom: '오미즈오 쿠다사이' },
+      { ko: '계산해 주세요', ja: 'お会計をお願いします', tts: 'おかいけいをおねがいします', rom: '오카이케이오 오네가이시마스' },
+      { ko: '이거 하나 더 주세요', ja: 'これをもう一つください', tts: 'これをもうひとつください', rom: '코레오 모 히토쓰 쿠다사이' },
+      { ko: '맵지 않게 해주세요', ja: '辛くしないでください', tts: 'からくしないでください', rom: '카라쿠 시나이데 쿠다사이' },
       { ko: '채식 메뉴 있나요?', ja: 'ベジタリアンメニューはありますか？', rom: '베지타리안 메뉴와 아리마스카?' },
-      { ko: '포장해 주세요', ja: '持ち帰りにしてください', rom: '모치카에리니 시테 쿠다사이' },
-      { ko: '영수증 주세요', ja: '領収書をください', rom: '료슈쇼오 쿠다사이' },
-      { ko: '따뜻한 차 주세요', ja: '温かいお茶をください', rom: '아타타카이 오차오 쿠다사이' },
-      { ko: '예약 했어요 (2명)', ja: '予約しています（2人）', rom: '요야쿠 시테이마스 (후타리)' },
+      { ko: '포장해 주세요', ja: '持ち帰りにしてください', tts: 'もちかえりにしてください', rom: '모치카에리니 시테 쿠다사이' },
+      { ko: '영수증 주세요', ja: '領収書をください', tts: 'りょうしゅうしょをください', rom: '료슈쇼오 쿠다사이' },
+      { ko: '따뜻한 차 주세요', ja: '温かいお茶을ください', tts: 'あたたかいおちゃをください', rom: '아타타카이 오차오 쿠다사이' },
+      { ko: '예약 했어요 (2명)', ja: '予約しています（2人）', tts: 'よやくしています、ふたりです', rom: '요야쿠 시테이마스 (후타리)' },
     ]
   },
   {
@@ -474,14 +499,14 @@ const categories = [
     icon: '🛍️',
     phrases: [
       { ko: '이거 얼마예요?', ja: 'これはいくらですか？', rom: '코레와 이쿠라데스카?' },
-      { ko: '좀 더 싸게 해주세요', ja: 'もう少し安くしてください', rom: '모 스코시 야스쿠 시테 쿠다사이' },
-      { ko: '다른 색 있나요?', ja: '他の色はありますか？', rom: '호카노 이로와 아리마스카?' },
-      { ko: '입어봐도 되나요?', ja: '試着してもいいですか？', rom: '시챠쿠 시테모 이이데스카?' },
-      { ko: '큰 사이즈 있나요?', ja: '大きいサイズはありますか？', rom: '오키이 사이즈와 아리마스카?' },
-      { ko: '카드 결제 되나요?', ja: 'カード払いはできますか？', rom: '카도 하라이와 데키마스카?' },
-      { ko: '면세 되나요?', ja: '免税になりますか？', rom: '멘제이니 나리마스카?' },
-      { ko: '봉투에 넣어 주세요', ja: '袋に入れてください', rom: '후쿠로니 이레테 쿠다사이' },
-      { ko: '이거 선물용으로 포장해 주세요', ja: 'プレゼント用に包んでください', rom: '푸레젠토요니 쓰쓴데 쿠다사이' },
+      { ko: '좀 더 싸게 해주세요', ja: 'もう少し安くしてください', tts: 'もうすこしやすくしてください', rom: '모 스코시 야스쿠 시테 쿠다사이' },
+      { ko: '다른 색 있나요?', ja: '他の色はありますか？', tts: 'ほかのいろはありますか', rom: '호카노 이로와 아리마스카?' },
+      { ko: '입어봐도 되나요?', ja: '試着してもいいですか？', tts: 'しちゃくしてもいいですか', rom: '시챠쿠 시테모 이이데스카?' },
+      { ko: '큰 사이즈 있나요?', ja: '大きいサイズはありますか？', tts: 'おおきいサイズはありますか', rom: '오키이 사이즈와 아리마스카?' },
+      { ko: '카드 결제 되나요?', ja: 'カード払いはできますか？', tts: 'カードばらいはできますか', rom: '카도 하라이와 데키마스카?' },
+      { ko: '면세 되나요?', ja: '免税になりますか？', tts: 'めんぜいになりますか', rom: '멘제이니 나리마스카?' },
+      { ko: '봉투에 넣어 주세요', ja: '袋に入れてください', tts: 'ふくろにいれてください', rom: '후쿠로니 이레테 쿠다사이' },
+      { ko: '이거 선물용으로 포장해 주세요', ja: 'プレゼント用に包んでください', tts: 'プレゼントようにつつんでください', rom: '푸레젠토요니 쓰쓴데 쿠다사이' },
       { ko: '영수증 주세요', ja: 'レシートをください', rom: '레시토오 쿠다사이' },
     ]
   },
@@ -491,15 +516,15 @@ const categories = [
     icon: '⛩️',
     phrases: [
       { ko: '여기가 어디예요?', ja: 'ここはどこですか？', rom: '코코와 도코데스카?' },
-      { ko: '사진 찍어도 되나요?', ja: '写真を撮ってもいいですか？', rom: '샤신오 톳테모 이이데스카?' },
-      { ko: '같이 사진 찍어도 될까요?', ja: '一緒に写真を撮ってもいいですか？', rom: '잇쇼니 샤신오 톳테모 이이데스카?' },
-      { ko: '입장료는 얼마예요?', ja: '入場料はいくらですか？', rom: '뉴조료와 이쿠라데스카?' },
-      { ko: '지도 있나요?', ja: '地図はありますか？', rom: '치즈와 아리마스카?' },
+      { ko: '사진 찍어도 되나요?', ja: '写真を撮ってもいいですか？', tts: 'しゃしんをとってもいいですか', rom: '샤신오 톳테모 이이데스카?' },
+      { ko: '같이 사진 찍어도 될까요?', ja: '一緒に写真を撮ってもいいですか？', tts: 'いっしょにしゃしんをとってもいいですか', rom: '잇쇼니 샤신오 톳테모 이이데스카?' },
+      { ko: '입장료는 얼마예요?', ja: '入場料はいくらですか？', tts: 'にゅうじょうりょうはいくらですか', rom: '뉴조료와 이쿠라데스카?' },
+      { ko: '지도 있나요?', ja: '地図はありますか？', tts: 'ちずはありますか', rom: '치즈와 아리마스카?' },
       { ko: '화장실은 어디예요?', ja: 'トイレはどこですか？', rom: '토이레와 도코데스카?' },
-      { ko: '몇 시에 문을 닫나요?', ja: '何時に閉まりますか？', rom: '난지니 시마리마스카?' },
-      { ko: '관광 안내소는 어디예요?', ja: '観光案内所はどこですか？', rom: '칸코 안나이조와 도코데스카?' },
-      { ko: '길을 잃었어요', ja: '道に迷いました', rom: '미치니 마요이마시타' },
-      { ko: '저기까지 걸어서 얼마나 걸려요?', ja: 'あそこまで歩いてどのくらいかかりますか？', rom: '아소코마데 아루이테 도노쿠라이 카카리마스카?' },
+      { ko: '몇 시에 문을 닫나요?', ja: '何時に閉まりますか？', tts: 'なんじにしまりますか', rom: '난지니 시마리마스카?' },
+      { ko: '관광 안내소는 어디예요?', ja: '観光案内所はどこですか？', tts: 'かんこうあんないじょはどこですか', rom: '칸코 안나이조와 도코데스카?' },
+      { ko: '길을 잃었어요', ja: '道に迷いました', tts: 'みちにまよいました', rom: '미치니 마요이마시타' },
+      { ko: '저기까지 걸어서 얼마나 걸려요?', ja: 'あそこまで歩いてどのくらいかかりますか？', tts: 'あそこまであるいてどのくらいかかりますか', rom: '아소코마데 아루이테 도노쿠라이 카카리마스카?' },
     ]
   },
   {
@@ -507,15 +532,15 @@ const categories = [
     label: '긴급',
     icon: '🆘',
     phrases: [
-      { ko: '도와주세요!', ja: '助けてください！', rom: '타스케테 쿠다사이!' },
-      { ko: '경찰을 불러 주세요', ja: '警察を呼んでください', rom: '케이사쓰오 욘데 쿠다사이' },
-      { ko: '구급차를 불러 주세요', ja: '救急車を呼んでください', rom: '큐큐샤오 욘데 쿠다사이' },
-      { ko: '병원은 어디에 있나요?', ja: '病院はどこにありますか？', rom: '뵤인와 도코니 아리마스카?' },
+      { ko: '도와주세요!', ja: '助けてください！', tts: 'たすけてください', rom: '타스케테 쿠다사이!' },
+      { ko: '경찰을 불러 주세요', ja: '警察を呼んでください', tts: 'けいさつをよんでください', rom: '케이사쓰오 욘데 쿠다사이' },
+      { ko: '구급차를 불러 주세요', ja: '救急車を呼んでください', tts: 'きゅうきゅうしゃをよんでください', rom: '큐큐샤오 욘데 쿠다사이' },
+      { ko: '병원은 어디에 있나요?', ja: '病院はどこにありますか？', tts: 'びょういんはどこにありますか', rom: '뵤인와 도코니 아리마스카?' },
       { ko: '가방을 잃어버렸어요', ja: 'かばんをなくしました', rom: '카반오 나쿠시마시타' },
       { ko: '여권을 잃어버렸어요', ja: 'パスポートをなくしました', rom: '파스포토오 나쿠시마시타' },
-      { ko: '한국 대사관에 전화해 주세요', ja: '韓国大使館に電話してください', rom: '칸코쿠 타이시칸니 덴와 시테 쿠다사이' },
-      { ko: '한국어 할 수 있는 분 계세요?', ja: '韓国語ができる方はいますか？', rom: '칸코쿠고가 데키루 카타와 이마스카?' },
-      { ko: '아파요', ja: '気分が悪いです', rom: '기분가 와루이데스' },
+      { ko: '한국 대사관에 전화해 주세요', ja: '韓国大使館に電話してください', tts: 'かんこくたいしかんにでんわしてください', rom: '칸코쿠 타이시칸니 덴와 시테 쿠다사이' },
+      { ko: '한국어 할 수 있는 분 계세요?', ja: '韓国語ができる方はいますか？', tts: 'かんこくごができるかたはいますか', rom: '칸코쿠고가 데키루 카타와 이마스카?' },
+      { ko: '아파요', ja: '気分が悪いです', tts: 'きぶんがわるいです', rom: '기분가 와루이데스' },
       { ko: '알레르기가 있어요', ja: 'アレルギーがあります', rom: '아레루기가 아리마스' },
     ]
   },
@@ -524,19 +549,19 @@ const categories = [
     label: '숫자',
     icon: '🔢',
     phrases: [
-      { ko: '1 일', ja: '一 / 1', rom: '이치' },
-      { ko: '2 이', ja: '二 / 2', rom: '니' },
-      { ko: '3 삼', ja: '三 / 3', rom: '산' },
-      { ko: '4 사', ja: '四 / 4', rom: '시 / 욘' },
-      { ko: '5 오', ja: '五 / 5', rom: '고' },
-      { ko: '6 육', ja: '六 / 6', rom: '로쿠' },
-      { ko: '7 칠', ja: '七 / 7', rom: '시치 / 나나' },
-      { ko: '8 팔', ja: '八 / 8', rom: '하치' },
-      { ko: '9 구', ja: '九 / 9', rom: '쿠 / 쿄' },
-      { ko: '10 십', ja: '十 / 10', rom: '쥬' },
-      { ko: '100 백', ja: '百 / 100', rom: '햐쿠' },
-      { ko: '1000 천', ja: '千 / 1000', rom: '센' },
-      { ko: '10000 만', ja: '一万 / 10000', rom: '이치만' },
+      { ko: '1 일', ja: '一 / 1', tts: 'いち', rom: '이치' },
+      { ko: '2 이', ja: '二 / 2', tts: 'に', rom: '니' },
+      { ko: '3 삼', ja: '三 / 3', tts: 'さん', rom: '산' },
+      { ko: '4 사', ja: '四 / 4', tts: 'よん', rom: '시 / 욘' },
+      { ko: '5 오', ja: '五 / 5', tts: 'ご', rom: '고' },
+      { ko: '6 육', ja: '六 / 6', tts: 'ろく', rom: '로쿠' },
+      { ko: '7 칠', ja: '七 / 7', tts: 'なな', rom: '시치 / 나나' },
+      { ko: '8 팔', ja: '八 / 8', tts: 'は치', rom: '하치' },
+      { ko: '9 구', ja: '九 / 9', tts: 'きゅう', rom: '쿠 / 쿄' },
+      { ko: '10 십', ja: '十 / 10', tts: 'じゅう', rom: '쥬' },
+      { ko: '100 백', ja: '百 / 100', tts: 'ひゃく', rom: '햐쿠' },
+      { ko: '1000 천', ja: '千 / 1000', tts: 'せん', rom: '센' },
+      { ko: '10000 만', ja: '一万 / 10000', tts: 'いちまん', rom: '이치만' },
     ]
   },
   {
@@ -545,39 +570,18 @@ const categories = [
     icon: '💴',
     phrases: [
       { ko: '이거 얼마예요?', ja: 'これはいくらですか？', rom: '코레와 이쿠라데스카?' },
-      { ko: '10엔', ja: '十円（じゅうえん）', rom: '쥬엔' },
-      { ko: '50엔', ja: '五十円（ごじゅうえん）', rom: '고쥬엔' },
-      { ko: '100엔', ja: '百円（ひゃくえん）', rom: '햐쿠엔' },
-      { ko: '500엔', ja: '五百円（ごひゃくえん）', rom: '고햐쿠엔' },
-      { ko: '1,000엔', ja: '千円（せんえん）', rom: '센엔' },
-      { ko: '5,000엔', ja: '五千円（ごせんえん）', rom: '고센엔' },
-      { ko: '10,000엔', ja: '一万円（いちまんえん）', rom: '이치만엔' },
-      { ko: '현금으로 할게요', ja: '現金で払います', rom: '겐킨데 하라이마스' },
-      { ko: '카드로 할게요', ja: 'カードで払います', rom: '카도데 하라이마스' },
-      { ko: '잔돈 주세요', ja: 'お釣りをください', rom: '오쓰리오 쿠다사이' },
-      { ko: '너무 비싸요', ja: '高すぎます', rom: '타카스기마스' },
-      { ko: '계산해 주세요', ja: 'お会計をお願いします', rom: '오카이케이오 오네가이시마스' },
-    ]
-  },
-  {
-    id: 'useful',
-    label: '유용한 표현',
-    icon: '✨',
-    phrases: [
-      { ko: '네', ja: 'はい', rom: '하이' },
-      { ko: '아니요', ja: 'いいえ', rom: '이이에' },
-      { ko: '모르겠어요', ja: 'わかりません', rom: '와카리마센' },
-      { ko: '~은/는 어디에 있나요?', ja: '〜はどこですか？', rom: '~와 도코데스카?' },
-      { ko: '~를/을 주세요', ja: '〜をください', rom: '~오 쿠다사이' },
-      { ko: '잠깐만요', ja: 'ちょっと待ってください', rom: '쵸또 맛테 쿠다사이' },
-      { ko: '한번 더 말씀해 주세요', ja: 'もう一度言ってください', rom: '모 이치도 잇테 쿠다사이' },
-      { ko: '천천히 말씀해 주세요', ja: 'ゆっくり話してください', rom: '윳쿠리 하나시테 쿠다사이' },
-      { ko: '영어 할 수 있나요?', ja: '英語はできますか？', rom: '에이고와 데키마스카?' },
-      { ko: '얼마나 걸려요?', ja: 'どのくらいかかりますか？', rom: '도노쿠라이 카카리마스카?' },
-      { ko: '좋아요', ja: 'いいですよ', rom: '이이데스요' },
-      { ko: '비싸요', ja: '高いです', rom: '타카이데스' },
-      { ko: '싸요', ja: '安いです', rom: '야스이데스' },
-      { ko: '맵지 않아요', ja: '辛くないです', rom: '카라쿠나이데스' },
+      { ko: '10엔', ja: '十円（じゅうえん）', tts: 'じゅうえん', rom: '쥬엔' },
+      { ko: '50엔', ja: '五十円（ごじゅうえん）', tts: 'ごじゅうえん', rom: '고쥬엔' },
+      { ko: '100엔', ja: '百円（ひゃくえん）', tts: 'ひゃくえん', rom: '햐쿠엔' },
+      { ko: '500엔', ja: '五百円（ごひゃくえん）', tts: 'ごひゃくえん', rom: '고햐쿠엔' },
+      { ko: '1,000엔', ja: '千円（せんえん）', tts: 'せんえん', rom: '센엔' },
+      { ko: '5,000엔', ja: '五千円（ごせんえん）', tts: 'ごせんえん', rom: '고센엔' },
+      { ko: '10,000엔', ja: '一万円（いちまんえん）', tts: 'いちまんえん', rom: '이치만엔' },
+      { ko: '현금으로 할게요', ja: '現金で払います', tts: 'げんきんではらいます', rom: '겐킨데 하라이마스' },
+      { ko: '카드로 할게요', ja: 'カードで払います', tts: 'カードではらいます', rom: '카도데 하라이마스' },
+      { ko: '잔돈 주세요', ja: 'お釣りをください', tts: 'おつりをください', rom: '오쓰리오 쿠다사이' },
+      { ko: '너무 비싸요', ja: '高すぎます', tts: 'たかすぎます', rom: '타카스기마스' },
+      { ko: '계산해 주세요', ja: 'お会計をお願いします', tts: 'おかいけいをおねがいします', rom: '오카이케이오 오네가이시마스' },
     ]
   },
 ];
@@ -620,160 +624,76 @@ function getFilteredPhrases() {
 // ──────────────────────────────────────────────
 // TTS (자연스러운 일본어 발음)
 // ──────────────────────────────────────────────
-let jaVoice = null;
-let voicesReady = false;
 let currentAudio = null;
+let isStopping = false;  // 연속 클릭 에러 방지용
 
-// 일본어 음성 찾기 (Google, Microsoft 등 고품질 음성 우선)
-function findBestJapaneseVoice() {
-  const voices = window.speechSynthesis.getVoices();
-  const jaVoices = voices.filter(v => v.lang === 'ja-JP' || v.lang === 'ja' || v.lang.startsWith('ja'));
-  
-  if (jaVoices.length === 0) return null;
-  
-  // 고품질 음성 우선 순위
-  const priority = ['google', 'microsoft', 'nanami', 'keita', 'haruka', 'sayaka'];
-  for (const keyword of priority) {
-    const match = jaVoices.find(v => v.name.toLowerCase().includes(keyword));
-    if (match) return match;
-  }
-  
-  // 없으면 아무 일본어 음성이라도 사용
-  return jaVoices[0];
-}
-
-function loadVoices() {
-  return new Promise(resolve => {
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-      jaVoice = findBestJapaneseVoice();
-      voicesReady = true;
-      resolve();
-      return;
-    }
-    // 비동기 로딩 대기 (모바일 브라우저)
-    let attempts = 0;
-    const handler = () => {
-      jaVoice = findBestJapaneseVoice();
-      voicesReady = true;
-      window.speechSynthesis.removeEventListener('voiceschanged', handler);
-      resolve();
-    };
-    window.speechSynthesis.addEventListener('voiceschanged', handler);
-    // 3초 안에 로드 안되면 타임아웃
-    setTimeout(() => {
-      if (!voicesReady) {
-        jaVoice = findBestJapaneseVoice();
-        voicesReady = true;
-        resolve();
-      }
-    }, 3000);
-  });
-}
-
-// 페이지 로드 시 음성 준비
-if (window.speechSynthesis) {
-  loadVoices().then(() => {
-    if (jaVoice) {
-      console.log('✅ 일본어 음성:', jaVoice.name, jaVoice.lang);
-    } else {
-      console.warn('⚠️ 일본어 음성 없음 - Google TTS 사용');
-    }
-  });
-}
-
-function cleanTextForTTS(text) {
-  // 1. 괄호 안에 히라가나가 있으면 그것을 TTS용으로 사용
-  //    예: 十円（じゅうえん）→ じゅうえん
-  const furigana = text.match(/（([^）]+)）/) || text.match(/\(([^)]+)\)/);
-  if (furigana && /[\u3040-\u309F]/.test(furigana[1])) {
-    return furigana[1];
-  }
-  
-  // 2. "一 / 1" 형태 → 한자 부분만 (숫자 제거)
-  let cleaned = text.replace(/\s*\/\s*\d+/g, '');
-  
-  // 3. 〜 기호 제거 (TTS가 읽으면 이상함)
-  cleaned = cleaned.replace(/[〜~]/g, '');
-  
-  // 4. 남은 괄호 내용 제거
-  cleaned = cleaned.replace(/（[^）]*）/g, '');
-  cleaned = cleaned.replace(/\([^)]*\)/g, '');
-  
-  return cleaned.trim();
-}
-
-function speak(text, card) {
-  // 이전 재생 정지
+// 이전 재생을 안전하게 정지
+function stopAll() {
+  isStopping = true;
   if (currentAudio) {
     currentAudio.pause();
+    currentAudio.onended = null;
+    currentAudio.onerror = null;
     currentAudio = null;
   }
   if (window.speechSynthesis) {
     window.speechSynthesis.cancel();
   }
+  // playing 클래스 모두 제거
+  document.querySelectorAll('.phrase-card.playing').forEach(c => c.classList.remove('playing'));
+  setTimeout(() => { isStopping = false; }, 100);
+}
 
-  const cleanText = cleanTextForTTS(text);
+function speak(text, card) {
+  stopAll();
+
   card.classList.add('playing');
   showToast('🔊 재생 중...');
 
-  // 일본어 음성이 있으면 SpeechSynthesis 사용 (가장 안정적)
-  if (window.speechSynthesis && jaVoice) {
-    speakWithVoice(cleanText, card);
-  } else {
-    // 일본어 음성 없으면 Google TTS 시도
-    speakWithGoogle(cleanText, card);
-  }
-}
-
-function speakWithVoice(text, card) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = jaVoice;
-  utter.lang = 'ja-JP';
-  utter.rate = 0.75;  // 어르신 맞춤 느린 속도
-  utter.pitch = 1.0;
-
-  utter.onend = () => card.classList.remove('playing');
-  utter.onerror = () => {
-    // SpeechSynthesis 실패 → Google TTS로 대체
-    speakWithGoogle(text, card);
-  };
-  window.speechSynthesis.speak(utter);
-}
-
-function speakWithGoogle(text, card) {
+  // Google 번역 TTS 사용 (자연스러운 억양)
   const encoded = encodeURIComponent(text);
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob`;
-  
+  const url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=gtx`;
+
   const audio = new Audio(url);
   currentAudio = audio;
-  
+
   audio.onended = () => {
-    card.classList.remove('playing');
+    if (!isStopping) card.classList.remove('playing');
     currentAudio = null;
   };
+
   audio.onerror = () => {
-    card.classList.remove('playing');
+    if (isStopping) return;
     currentAudio = null;
-    // 둘 다 실패하면 내장 TTS라도 시도
-    if (window.speechSynthesis) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'ja-JP';
-      utter.rate = 0.75;
-      utter.onend = () => card.classList.remove('playing');
-      utter.onerror = () => {
-        card.classList.remove('playing');
-        showToast('⚠️ 음성을 재생할 수 없어요');
-      };
-      window.speechSynthesis.speak(utter);
-    } else {
-      showToast('⚠️ 음성을 재생할 수 없어요');
-    }
+    // Google TTS 실패 → 내장 TTS로 대체
+    speakFallback(text, card);
   };
-  
+
   audio.play().catch(() => {
-    audio.onerror();
+    if (isStopping) return;
+    currentAudio = null;
+    speakFallback(text, card);
   });
+}
+
+// 내장 TTS 대체
+function speakFallback(text, card) {
+  if (!window.speechSynthesis) {
+    card.classList.remove('playing');
+    return;
+  }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  utter.rate = 0.8;
+
+  // 일본어 음성 찾기
+  const voices = window.speechSynthesis.getVoices();
+  const jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.startsWith('ja'));
+  if (jaVoice) utter.voice = jaVoice;
+
+  utter.onend = () => { if (!isStopping) card.classList.remove('playing'); };
+  utter.onerror = () => { if (!isStopping) card.classList.remove('playing'); };
+  window.speechSynthesis.speak(utter);
 }
 
 // ──────────────────────────────────────────────
@@ -841,10 +761,11 @@ function renderPhrases() {
       '</div>' +
       '<div class="japanese-text">' + p.ja + '</div>' +
       '<div class="pronunciation">' + p.rom + '</div>';
-    card.addEventListener('click', () => speak(p.ja, card));
+    const ttsText = p.tts || p.ja;
+    card.addEventListener('click', () => speak(ttsText, card));
     card.querySelector('.speak-btn').addEventListener('click', e => {
       e.stopPropagation();
-      speak(p.ja, card);
+      speak(ttsText, card);
     });
     grid.appendChild(card);
   });
@@ -854,12 +775,32 @@ function renderPhrases() {
 // 검색
 // ──────────────────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', e => {
+  const prevQuery = searchQuery;
   searchQuery = e.target.value.trim();
   if (searchQuery) {
     currentCat = 'all';
     renderCategories();
   }
   renderPhrases();
+
+  if (searchQuery && !prevQuery) {
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      const mainRect = mainEl.getBoundingClientRect();
+      if (mainRect.top > 100) {
+        mainEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+});
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      mainEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 });
 
 // ──────────────────────────────────────────────
