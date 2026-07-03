@@ -618,24 +618,93 @@ function getFilteredPhrases() {
 }
 
 // ──────────────────────────────────────────────
-// TTS (Google 번역 TTS - 모든 브라우저 호환)
+// TTS (자연스러운 일본어 발음)
 // ──────────────────────────────────────────────
+let jaVoice = null;
+let voicesReady = false;
 let currentAudio = null;
 
+// 일본어 음성 찾기 (Google, Microsoft 등 고품질 음성 우선)
+function findBestJapaneseVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  const jaVoices = voices.filter(v => v.lang === 'ja-JP' || v.lang === 'ja' || v.lang.startsWith('ja'));
+  
+  if (jaVoices.length === 0) return null;
+  
+  // 고품질 음성 우선 순위
+  const priority = ['google', 'microsoft', 'nanami', 'keita', 'haruka', 'sayaka'];
+  for (const keyword of priority) {
+    const match = jaVoices.find(v => v.name.toLowerCase().includes(keyword));
+    if (match) return match;
+  }
+  
+  // 없으면 아무 일본어 음성이라도 사용
+  return jaVoices[0];
+}
+
+function loadVoices() {
+  return new Promise(resolve => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      jaVoice = findBestJapaneseVoice();
+      voicesReady = true;
+      resolve();
+      return;
+    }
+    // 비동기 로딩 대기 (모바일 브라우저)
+    let attempts = 0;
+    const handler = () => {
+      jaVoice = findBestJapaneseVoice();
+      voicesReady = true;
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+      resolve();
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', handler);
+    // 3초 안에 로드 안되면 타임아웃
+    setTimeout(() => {
+      if (!voicesReady) {
+        jaVoice = findBestJapaneseVoice();
+        voicesReady = true;
+        resolve();
+      }
+    }, 3000);
+  });
+}
+
+// 페이지 로드 시 음성 준비
+if (window.speechSynthesis) {
+  loadVoices().then(() => {
+    if (jaVoice) {
+      console.log('✅ 일본어 음성:', jaVoice.name, jaVoice.lang);
+    } else {
+      console.warn('⚠️ 일본어 음성 없음 - Google TTS 사용');
+    }
+  });
+}
+
 function cleanTextForTTS(text) {
-  // 괄호 안의 읽기(ふりがな) 제거: 十円（じゅうえん）→ 十円
-  let cleaned = text.replace(/（[^）]*）/g, '');
-  // 반각 괄호도 제거
+  // 1. 괄호 안에 히라가나가 있으면 그것을 TTS용으로 사용
+  //    예: 十円（じゅうえん）→ じゅうえん
+  const furigana = text.match(/（([^）]+)）/) || text.match(/\(([^)]+)\)/);
+  if (furigana && /[\u3040-\u309F]/.test(furigana[1])) {
+    return furigana[1];
+  }
+  
+  // 2. "一 / 1" 형태 → 한자 부분만 (숫자 제거)
+  let cleaned = text.replace(/\s*\/\s*\d+/g, '');
+  
+  // 3. 〜 기호 제거 (TTS가 읽으면 이상함)
+  cleaned = cleaned.replace(/[〜~]/g, '');
+  
+  // 4. 남은 괄호 내용 제거
+  cleaned = cleaned.replace(/（[^）]*）/g, '');
   cleaned = cleaned.replace(/\([^)]*\)/g, '');
-  // 숫자 / 한자 형태 정리: "一 / 1" → "一"  (숫자 부분 제거)
-  cleaned = cleaned.replace(/\s*\/\s*\d+/g, '');
+  
   return cleaned.trim();
 }
 
 function speak(text, card) {
-  const cleanText = cleanTextForTTS(text);
-  
-  // 이전 오디오 정지
+  // 이전 재생 정지
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -644,12 +713,37 @@ function speak(text, card) {
     window.speechSynthesis.cancel();
   }
 
+  const cleanText = cleanTextForTTS(text);
   card.classList.add('playing');
   showToast('🔊 재생 중...');
 
-  // Google 번역 TTS 사용 (모든 브라우저에서 동작)
-  const encoded = encodeURIComponent(cleanText);
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob&ttsspeed=0.8`;
+  // 일본어 음성이 있으면 SpeechSynthesis 사용 (가장 안정적)
+  if (window.speechSynthesis && jaVoice) {
+    speakWithVoice(cleanText, card);
+  } else {
+    // 일본어 음성 없으면 Google TTS 시도
+    speakWithGoogle(cleanText, card);
+  }
+}
+
+function speakWithVoice(text, card) {
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = jaVoice;
+  utter.lang = 'ja-JP';
+  utter.rate = 0.75;  // 어르신 맞춤 느린 속도
+  utter.pitch = 1.0;
+
+  utter.onend = () => card.classList.remove('playing');
+  utter.onerror = () => {
+    // SpeechSynthesis 실패 → Google TTS로 대체
+    speakWithGoogle(text, card);
+  };
+  window.speechSynthesis.speak(utter);
+}
+
+function speakWithGoogle(text, card) {
+  const encoded = encodeURIComponent(text);
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob`;
   
   const audio = new Audio(url);
   currentAudio = audio;
@@ -658,43 +752,28 @@ function speak(text, card) {
     card.classList.remove('playing');
     currentAudio = null;
   };
-  
   audio.onerror = () => {
-    // Google TTS 실패 시 브라우저 내장 TTS로 대체
-    console.warn('Google TTS 실패, 내장 TTS로 대체');
-    speakFallback(cleanText, card);
+    card.classList.remove('playing');
+    currentAudio = null;
+    // 둘 다 실패하면 내장 TTS라도 시도
+    if (window.speechSynthesis) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ja-JP';
+      utter.rate = 0.75;
+      utter.onend = () => card.classList.remove('playing');
+      utter.onerror = () => {
+        card.classList.remove('playing');
+        showToast('⚠️ 음성을 재생할 수 없어요');
+      };
+      window.speechSynthesis.speak(utter);
+    } else {
+      showToast('⚠️ 음성을 재생할 수 없어요');
+    }
   };
   
   audio.play().catch(() => {
-    // 자동재생 차단 등의 이유로 실패 시 내장 TTS로 대체
-    speakFallback(cleanText, card);
+    audio.onerror();
   });
-}
-
-// 내장 TTS 대체 (Google TTS 실패 시)
-function speakFallback(text, card) {
-  if (!window.speechSynthesis) {
-    card.classList.remove('playing');
-    showToast('⚠️ 음성을 재생할 수 없어요');
-    return;
-  }
-  
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'ja-JP';
-  utter.rate = 0.8;
-  utter.pitch = 1.0;
-
-  // 일본어 음성 찾기
-  const voices = window.speechSynthesis.getVoices();
-  const jaVoice = voices.find(v => v.lang === 'ja-JP' || v.lang === 'ja');
-  if (jaVoice) utter.voice = jaVoice;
-
-  utter.onend = () => card.classList.remove('playing');
-  utter.onerror = () => {
-    card.classList.remove('playing');
-    showToast('⚠️ 음성 재생에 실패했어요');
-  };
-  window.speechSynthesis.speak(utter);
 }
 
 // ──────────────────────────────────────────────
