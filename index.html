@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>엄마의 일본 여행 일본어 회화</title>
+  <meta name="description" content="일본 여행을 위한 기초 일본어 회화 가이드 - 상황별 단어와 문장" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFF9F0;
+      --bg2: #FFF3E0;
+      --card: #FFFFFF;
+      --card-hover: #FFF0DB;
+      --accent: #D84315;
+      --accent2: #E65100;
+      --accent3: #1565C0;
+      --gold: #E65100;
+      --text: #212121;
+      --text-sub: #424242;
+      --border: rgba(0,0,0,0.12);
+      --shadow: 0 4px 16px rgba(0,0,0,0.10);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 18px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ── 배경 파티클 ── */
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.10;
+    }
+    .orb1 { width: 500px; height: 500px; background: #FFE0B2; top: -100px; left: -100px; animation: drift1 12s ease-in-out infinite alternate; }
+    .orb2 { width: 400px; height: 400px; background: #FFCCBC; bottom: -80px; right: -80px; animation: drift2 10s ease-in-out infinite alternate; }
+    .orb3 { width: 300px; height: 300px; background: #BBDEFB; top: 40%; left: 50%; animation: drift3 14s ease-in-out infinite alternate; }
+
+    @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(60px,40px); } }
+    @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-50px,-30px); } }
+    @keyframes drift3 { from { transform: translate(-50%,-50%); } to { transform: translate(-55%,-45%); } }
+
+    /* ── 헤더 ── */
+    header {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 48px 20px 32px;
+    }
+    .header-emoji { font-size: 3.5rem; display: block; margin-bottom: 12px; animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    header p {
+      color: var(--text-sub);
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    /* ── 검색 ── */
+    .search-wrap {
+      position: relative; z-index: 10;
+      max-width: 480px; margin: 0 auto 32px;
+      padding: 0 20px;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      padding: 16px 22px 16px 52px;
+      color: var(--text);
+      font-size: 1.1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+      box-shadow: var(--shadow);
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--text-sub); }
+    .search-icon {
+      position: absolute; left: 36px; top: 50%; transform: translateY(-50%);
+      font-size: 1.3rem; pointer-events: none;
+    }
+
+    /* ── 카테고리 탭 ── */
+    .categories {
+      position: relative; z-index: 10;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center;
+      padding: 0 20px 32px;
+      max-width: 900px; margin: 0 auto;
+    }
+    .cat-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      padding: 14px 22px;
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s;
+      white-space: nowrap;
+      box-shadow: var(--shadow);
+    }
+    .cat-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+    .cat-btn.active {
+      background: var(--accent);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(216,67,21,0.35);
+      transform: translateY(-2px);
+    }
+    .cat-icon { font-size: 1.3rem; }
+
+    /* ── 콘텐츠 영역 ── */
+    main {
+      position: relative; z-index: 10;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .section-title {
+      font-size: 1.4rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-title span.icon { font-size: 1.8rem; }
+
+    /* ── 카드 그리드 ── */
+    .phrases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .phrase-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .phrase-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,183,77,0.08), rgba(255,138,101,0.08));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .phrase-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(216,67,21,0.15);
+    }
+    .phrase-card:hover::before { opacity: 1; }
+    .phrase-card.playing {
+      border-color: var(--accent3);
+      box-shadow: 0 0 0 3px rgba(21,101,192,0.25);
+      animation: pulse 0.4s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .korean-text {
+      font-size: 1.25rem;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .speak-btn {
+      background: rgba(216,67,21,0.1);
+      border: none; border-radius: 50%;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--accent);
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+    .speak-btn:hover { background: var(--accent); color: #fff; transform: scale(1.1); }
+
+    .japanese-text {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .pronunciation {
+      font-size: 1.1rem;
+      color: var(--accent3);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── 없을 때 ── */
+    .empty-state {
+      text-align: center; padding: 60px 20px;
+      color: var(--text-sub);
+    }
+    .empty-state .emoji { font-size: 3rem; margin-bottom: 12px; }
+
+    /* ── 토스트 ── */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--accent3);
+      border: none;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(21,101,192,0.3);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── 반응형 (모바일 1열) ── */
+    @media (max-width: 768px) {
+      .phrases-grid { grid-template-columns: 1fr; gap: 14px; }
+      .phrase-card { padding: 22px; }
+      .japanese-text { font-size: 1.6rem; }
+      .korean-text { font-size: 1.15rem; }
+      .pronunciation { font-size: 1.0rem; }
+      .cat-btn { padding: 12px 18px; font-size: 1.0rem; }
+      header { padding: 36px 16px 24px; }
+      header h1 { font-size: 1.6rem; }
+      header p { font-size: 1.05rem; }
+      .search-wrap input { font-size: 1.05rem; padding: 14px 20px 14px 48px; }
+      .section-title { font-size: 1.25rem; }
+      .speak-btn { width: 48px; height: 48px; font-size: 1.3rem; }
+    }
+
+    /* ── 상단 배너 ── */
+    .tip-banner {
+      position: relative; z-index: 10;
+      max-width: 700px; margin: 0 auto 28px;
+      padding: 0 20px;
+    }
+    .tip-inner {
+      background: #FFF3E0;
+      border: 2px solid #FFB74D;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #E65100;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    /* ── 카드 개수 뱃지 ── */
+    .count-badge {
+      background: rgba(216,67,21,0.1);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 배경 -->
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- 헤더 -->
+<header>
+  <span class="header-emoji">🌸</span>
+  <h1>엄마의 일본 여행 회화</h1>
+  <p>카드를 누르면 발음을 들을 수 있어요 🔊</p>
+</header>
+
+<!-- 팁 배너 -->
+<div class="tip-banner">
+  <div class="tip-inner">
+    💡 카드를 클릭하면 일본어 발음이 자동으로 재생됩니다. 크게 따라해 보세요!
+  </div>
+</div>
+
+<!-- 검색 -->
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="searchInput" placeholder="한국어 또는 일본어로 검색..." />
+</div>
+
+<!-- 카테고리 -->
+<div class="categories" id="categoryTabs"></div>
+
+<!-- 메인 콘텐츠 -->
+<main>
+  <div class="section-title">
+    <span class="icon" id="sectionIcon">🗂️</span>
+    <span id="sectionLabel">전체</span>
+    <span class="count-badge" id="countBadge">0개</span>
+  </div>
+  <div class="phrases-grid" id="phrasesGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <div class="emoji">🔎</div>
+    <p>검색 결과가 없습니다</p>
+  </div>
+</main>
+
+<!-- 토스트 -->
+<div class="toast" id="toast">🔊 재생 중...</div>
+
+<script>
+// ──────────────────────────────────────────────
+// 데이터
+// ──────────────────────────────────────────────
+const categories = [
+  {
+    id: 'all',
+    label: '전체',
+    icon: '🗂️',
+  },
+  {
+    id: 'greet',
+    label: '인사',
+    icon: '👋',
+    phrases: [
+      { ko: '안녕하세요', ja: 'こんにちは', rom: '콘니치와' },
+      { ko: '안녕히 계세요 / 잘 있어', ja: 'さようなら', rom: '사요나라' },
+      { ko: '감사합니다', ja: 'ありがとうございます', rom: '아리가토 고자이마스' },
+      { ko: '천만에요', ja: 'どういたしまして', rom: '도이타시마시테' },
+      { ko: '실례합니다 / 죄송합니다', ja: 'すみません', rom: '스미마센' },
+      { ko: '미안합니다', ja: 'ごめんなさい', rom: '고멘나사이' },
+      { ko: '좋은 아침이에요', ja: 'おはようございます', rom: '오하요 고자이마스' },
+      { ko: '안녕히 주무세요', ja: 'おやすみなさい', rom: '오야스미나사이' },
+      { ko: '처음 뵙겠습니다', ja: 'はじめまして', rom: '하지메마시테' },
+      { ko: '잘 부탁드립니다', ja: 'よろしくおねがいします', rom: '요로시쿠 오네가이시마스' },
+    ]
+  },
+  {
+    id: 'transport',
+    label: '교통',
+    icon: '🚃',
+    phrases: [
+      { ko: '~ 역은 어디에 있나요?', ja: '〜駅はどこですか？', rom: '~에키와 도코데스카?' },
+      { ko: '~ 까지 얼마예요?', ja: '〜までいくらですか？', rom: '~마데 이쿠라데스카?' },
+      { ko: '~ 까지 가주세요', ja: '〜まで行ってください', rom: '~마데 잇테 쿠다사이' },
+      { ko: '이 버스는 ~ 에 가나요?', ja: 'このバスは〜に行きますか？', rom: '코노 바스와 ~니 이키마스카?' },
+      { ko: '여기서 내려 주세요', ja: 'ここで降ろしてください', rom: '코코데 오로시테 쿠다사이' },
+      { ko: '신칸센 표를 사고 싶어요', ja: '新幹線のチケットを買いたいです', rom: '신칸센노 치켓토오 카이타이데스' },
+      { ko: '이 열차는 ~ 에 멈추나요?', ja: 'この電車は〜に止まりますか？', rom: '코노 덴샤와 ~니 토마리마스카?' },
+      { ko: '지하철 노선도 있나요?', ja: '地下鉄の路線図はありますか？', rom: '치카테쓰노 로센즈와 아리마스카?' },
+      { ko: '택시 불러 주세요', ja: 'タクシーを呼んでください', rom: '타쿠시오 욘데 쿠다사이' },
+      { ko: '공항까지 가주세요', ja: '空港まで行ってください', rom: '쿠코마데 잇테 쿠다사이' },
+    ]
+  },
+  {
+    id: 'hotel',
+    label: '숙박',
+    icon: '🏨',
+    phrases: [
+      { ko: '체크인 하고 싶어요', ja: 'チェックインをお願いします', rom: '체쿠인오 오네가이시마스' },
+      { ko: '체크아웃 해주세요', ja: 'チェックアウトをお願いします', rom: '체쿠아우토오 오네가이시마스' },
+      { ko: '예약을 했어요', ja: '予約をしています', rom: '요야쿠오 시테이마스' },
+      { ko: '방 열쇠를 주세요', ja: '部屋の鍵をください', rom: '헤야노 카기오 쿠다사이' },
+      { ko: '이 근처에 편의점이 있나요?', ja: 'この近くにコンビニはありますか？', rom: '코노 치카쿠니 콘비니와 아리마스카?' },
+      { ko: '와이파이 비밀번호가 뭔가요?', ja: 'Wi-Fiのパスワードは何ですか？', rom: '와이파이노 파스와도와 난데스카?' },
+      { ko: '수건을 더 주세요', ja: 'タオルをもっとください', rom: '타오루오 못토 쿠다사이' },
+      { ko: '조식은 몇 시부터인가요?', ja: '朝食は何時からですか？', rom: '초쇼쿠와 난지 카라 데스카?' },
+      { ko: '짐을 맡아 주세요', ja: '荷物を預かってください', rom: '니모쓰오 아즈캇테 쿠다사이' },
+      { ko: '다른 방으로 바꿔 주세요', ja: '別の部屋に変えてください', rom: '베쓰노 헤야니 카에테 쿠다사이' },
+    ]
+  },
+  {
+    id: 'restaurant',
+    label: '식당',
+    icon: '🍜',
+    phrases: [
+      { ko: '메뉴판 주세요', ja: 'メニューをください', rom: '메뉴오 쿠다사이' },
+      { ko: '이것으로 주세요', ja: 'これをください', rom: '코레오 쿠다사이' },
+      { ko: '맛있어요!', ja: 'おいしい！', rom: '오이시이!' },
+      { ko: '물 주세요', ja: 'お水をください', rom: '오미즈오 쿠다사이' },
+      { ko: '계산해 주세요', ja: 'お会計をお願いします', rom: '오카이케이오 오네가이시마스' },
+      { ko: '이거 하나 더 주세요', ja: 'これをもう一つください', rom: '코레오 모 히토쓰 쿠다사이' },
+      { ko: '맵지 않게 해주세요', ja: '辛くしないでください', rom: '카라쿠 시나이데 쿠다사이' },
+      { ko: '채식 메뉴 있나요?', ja: 'ベジタリアンメニューはありますか？', rom: '베지타리안 메뉴와 아리마스카?' },
+      { ko: '포장해 주세요', ja: '持ち帰りにしてください', rom: '모치카에리니 시테 쿠다사이' },
+      { ko: '영수증 주세요', ja: '領収書をください', rom: '료슈쇼오 쿠다사이' },
+      { ko: '따뜻한 차 주세요', ja: '温かいお茶をください', rom: '아타타카이 오차오 쿠다사이' },
+      { ko: '예약 했어요 (2명)', ja: '予約しています（2人）', rom: '요야쿠 시테이마스 (후타리)' },
+    ]
+  },
+  {
+    id: 'shopping',
+    label: '쇼핑',
+    icon: '🛍️',
+    phrases: [
+      { ko: '이거 얼마예요?', ja: 'これはいくらですか？', rom: '코레와 이쿠라데스카?' },
+      { ko: '좀 더 싸게 해주세요', ja: 'もう少し安くしてください', rom: '모 스코시 야스쿠 시테 쿠다사이' },
+      { ko: '다른 색 있나요?', ja: '他の色はありますか？', rom: '호카노 이로와 아리마스카?' },
+      { ko: '입어봐도 되나요?', ja: '試着してもいいですか？', rom: '시챠쿠 시테모 이이데스카?' },
+      { ko: '큰 사이즈 있나요?', ja: '大きいサイズはありますか？', rom: '오키이 사이즈와 아리마스카?' },
+      { ko: '카드 결제 되나요?', ja: 'カード払いはできますか？', rom: '카도 하라이와 데키마스카?' },
+      { ko: '면세 되나요?', ja: '免税になりますか？', rom: '멘제이니 나리마스카?' },
+      { ko: '봉투에 넣어 주세요', ja: '袋に入れてください', rom: '후쿠로니 이레테 쿠다사이' },
+      { ko: '이거 선물용으로 포장해 주세요', ja: 'プレゼント用に包んでください', rom: '푸레젠토요니 쓰쓴데 쿠다사이' },
+      { ko: '영수증 주세요', ja: 'レシートをください', rom: '레시토오 쿠다사이' },
+    ]
+  },
+  {
+    id: 'sightseeing',
+    label: '관광',
+    icon: '⛩️',
+    phrases: [
+      { ko: '여기가 어디예요?', ja: 'ここはどこですか？', rom: '코코와 도코데스카?' },
+      { ko: '사진 찍어도 되나요?', ja: '写真を撮ってもいいですか？', rom: '샤신오 톳테모 이이데스카?' },
+      { ko: '같이 사진 찍어도 될까요?', ja: '一緒に写真を撮ってもいいですか？', rom: '잇쇼니 샤신오 톳테모 이이데스카?' },
+      { ko: '입장료는 얼마예요?', ja: '入場料はいくらですか？', rom: '뉴조료와 이쿠라데스카?' },
+      { ko: '지도 있나요?', ja: '地図はありますか？', rom: '치즈와 아리마스카?' },
+      { ko: '화장실은 어디예요?', ja: 'トイレはどこですか？', rom: '토이레와 도코데스카?' },
+      { ko: '몇 시에 문을 닫나요?', ja: '何時に閉まりますか？', rom: '난지니 시마리마스카?' },
+      { ko: '관광 안내소는 어디예요?', ja: '観光案内所はどこですか？', rom: '칸코 안나이조와 도코데스카?' },
+      { ko: '길을 잃었어요', ja: '道に迷いました', rom: '미치니 마요이마시타' },
+      { ko: '저기까지 걸어서 얼마나 걸려요?', ja: 'あそこまで歩いてどのくらいかかりますか？', rom: '아소코마데 아루이테 도노쿠라이 카카리마스카?' },
+    ]
+  },
+  {
+    id: 'emergency',
+    label: '긴급',
+    icon: '🆘',
+    phrases: [
+      { ko: '도와주세요!', ja: '助けてください！', rom: '타스케테 쿠다사이!' },
+      { ko: '경찰을 불러 주세요', ja: '警察を呼んでください', rom: '케이사쓰오 욘데 쿠다사이' },
+      { ko: '구급차를 불러 주세요', ja: '救急車を呼んでください', rom: '큐큐샤오 욘데 쿠다사이' },
+      { ko: '병원은 어디에 있나요?', ja: '病院はどこにありますか？', rom: '뵤인와 도코니 아리마스카?' },
+      { ko: '가방을 잃어버렸어요', ja: 'かばんをなくしました', rom: '카반오 나쿠시마시타' },
+      { ko: '여권을 잃어버렸어요', ja: 'パスポートをなくしました', rom: '파스포토오 나쿠시마시타' },
+      { ko: '한국 대사관에 전화해 주세요', ja: '韓国大使館に電話してください', rom: '칸코쿠 타이시칸니 덴와 시테 쿠다사이' },
+      { ko: '한국어 할 수 있는 분 계세요?', ja: '韓国語ができる方はいますか？', rom: '칸코쿠고가 데키루 카타와 이마스카?' },
+      { ko: '아파요', ja: '気分が悪いです', rom: '기분가 와루이데스' },
+      { ko: '알레르기가 있어요', ja: 'アレルギーがあります', rom: '아레루기가 아리마스' },
+    ]
+  },
+  {
+    id: 'numbers',
+    label: '숫자',
+    icon: '🔢',
+    phrases: [
+      { ko: '1 일', ja: '一 / 1', rom: '이치' },
+      { ko: '2 이', ja: '二 / 2', rom: '니' },
+      { ko: '3 삼', ja: '三 / 3', rom: '산' },
+      { ko: '4 사', ja: '四 / 4', rom: '시 / 욘' },
+      { ko: '5 오', ja: '五 / 5', rom: '고' },
+      { ko: '6 육', ja: '六 / 6', rom: '로쿠' },
+      { ko: '7 칠', ja: '七 / 7', rom: '시치 / 나나' },
+      { ko: '8 팔', ja: '八 / 8', rom: '하치' },
+      { ko: '9 구', ja: '九 / 9', rom: '쿠 / 쿄' },
+      { ko: '10 십', ja: '十 / 10', rom: '쥬' },
+      { ko: '100 백', ja: '百 / 100', rom: '햐쿠' },
+      { ko: '1000 천', ja: '千 / 1000', rom: '센' },
+      { ko: '10000 만', ja: '一万 / 10000', rom: '이치만' },
+    ]
+  },
+  {
+    id: 'money',
+    label: '돈',
+    icon: '💴',
+    phrases: [
+      { ko: '이거 얼마예요?', ja: 'これはいくらですか？', rom: '코레와 이쿠라데스카?' },
+      { ko: '10엔', ja: '十円（じゅうえん）', rom: '쥬엔' },
+      { ko: '50엔', ja: '五十円（ごじゅうえん）', rom: '고쥬엔' },
+      { ko: '100엔', ja: '百円（ひゃくえん）', rom: '햐쿠엔' },
+      { ko: '500엔', ja: '五百円（ごひゃくえん）', rom: '고햐쿠엔' },
+      { ko: '1,000엔', ja: '千円（せんえん）', rom: '센엔' },
+      { ko: '5,000엔', ja: '五千円（ごせんえん）', rom: '고센엔' },
+      { ko: '10,000엔', ja: '一万円（いちまんえん）', rom: '이치만엔' },
+      { ko: '현금으로 할게요', ja: '現金で払います', rom: '겐킨데 하라이마스' },
+      { ko: '카드로 할게요', ja: 'カードで払います', rom: '카도데 하라이마스' },
+      { ko: '잔돈 주세요', ja: 'お釣りをください', rom: '오쓰리오 쿠다사이' },
+      { ko: '너무 비싸요', ja: '高すぎます', rom: '타카스기마스' },
+      { ko: '계산해 주세요', ja: 'お会計をお願いします', rom: '오카이케이오 오네가이시마스' },
+    ]
+  },
+  {
+    id: 'useful',
+    label: '유용한 표현',
+    icon: '✨',
+    phrases: [
+      { ko: '네', ja: 'はい', rom: '하이' },
+      { ko: '아니요', ja: 'いいえ', rom: '이이에' },
+      { ko: '모르겠어요', ja: 'わかりません', rom: '와카리마센' },
+      { ko: '~은/는 어디에 있나요?', ja: '〜はどこですか？', rom: '~와 도코데스카?' },
+      { ko: '~를/을 주세요', ja: '〜をください', rom: '~오 쿠다사이' },
+      { ko: '잠깐만요', ja: 'ちょっと待ってください', rom: '쵸또 맛테 쿠다사이' },
+      { ko: '한번 더 말씀해 주세요', ja: 'もう一度言ってください', rom: '모 이치도 잇테 쿠다사이' },
+      { ko: '천천히 말씀해 주세요', ja: 'ゆっくり話してください', rom: '윳쿠리 하나시테 쿠다사이' },
+      { ko: '영어 할 수 있나요?', ja: '英語はできますか？', rom: '에이고와 데키마스카?' },
+      { ko: '얼마나 걸려요?', ja: 'どのくらいかかりますか？', rom: '도노쿠라이 카카리마스카?' },
+      { ko: '좋아요', ja: 'いいですよ', rom: '이이데스요' },
+      { ko: '비싸요', ja: '高いです', rom: '타카이데스' },
+      { ko: '싸요', ja: '安いです', rom: '야스이데스' },
+      { ko: '맵지 않아요', ja: '辛くないです', rom: '카라쿠나이데스' },
+    ]
+  },
+];
+
+// ──────────────────────────────────────────────
+// 상태
+// ──────────────────────────────────────────────
+let currentCat = 'all';
+let searchQuery = '';
+
+// ──────────────────────────────────────────────
+// 유틸
+// ──────────────────────────────────────────────
+function getAllPhrases() {
+  return categories
+    .filter(c => c.id !== 'all')
+    .flatMap(c => c.phrases.map(p => ({ ...p, catIcon: c.icon, catId: c.id })));
+}
+
+function getFilteredPhrases() {
+  let list = currentCat === 'all'
+    ? getAllPhrases()
+    : (categories.find(c => c.id === currentCat)?.phrases || []).map(p => ({
+        ...p,
+        catIcon: categories.find(c => c.id === currentCat).icon,
+        catId: currentCat,
+      }));
+
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(p =>
+      p.ko.toLowerCase().includes(q) ||
+      p.ja.includes(q) ||
+      p.rom.includes(q)
+    );
+  }
+  return list;
+}
+
+// ──────────────────────────────────────────────
+// TTS
+// ──────────────────────────────────────────────
+function speak(text, card) {
+  if (!window.speechSynthesis) {
+    showToast('이 브라우저는 음성을 지원하지 않아요');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  utter.rate = 0.85;
+  utter.pitch = 1.0;
+
+  card.classList.add('playing');
+  showToast('🔊 재생 중...');
+  utter.onend = () => {
+    card.classList.remove('playing');
+  };
+  window.speechSynthesis.speak(utter);
+}
+
+// ──────────────────────────────────────────────
+// 토스트
+// ──────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ──────────────────────────────────────────────
+// 렌더
+// ──────────────────────────────────────────────
+function renderCategories() {
+  const wrap = document.getElementById('categoryTabs');
+  wrap.innerHTML = '';
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (currentCat === cat.id ? ' active' : '');
+    btn.dataset.id = cat.id;
+    btn.innerHTML = '<span class="cat-icon">' + cat.icon + '</span>' + cat.label;
+    btn.addEventListener('click', () => {
+      currentCat = cat.id;
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      renderCategories();
+      renderPhrases();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderPhrases() {
+  const grid = document.getElementById('phrasesGrid');
+  const empty = document.getElementById('emptyState');
+  const label = document.getElementById('sectionLabel');
+  const icon = document.getElementById('sectionIcon');
+  const badge = document.getElementById('countBadge');
+
+  const cat = categories.find(c => c.id === currentCat);
+  label.textContent = cat ? cat.label : '전체';
+  icon.textContent = cat ? cat.icon : '🗂️';
+
+  const phrases = getFilteredPhrases();
+  badge.textContent = phrases.length + '개';
+
+  grid.innerHTML = '';
+  if (phrases.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  phrases.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'phrase-card';
+    card.innerHTML =
+      '<div class="card-header">' +
+        '<div class="korean-text">' + p.ko + '</div>' +
+        '<button class="speak-btn" title="발음 듣기" aria-label="발음 듣기">🔊</button>' +
+      '</div>' +
+      '<div class="japanese-text">' + p.ja + '</div>' +
+      '<div class="pronunciation">' + p.rom + '</div>';
+    card.addEventListener('click', () => speak(p.ja, card));
+    card.querySelector('.speak-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      speak(p.ja, card);
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ──────────────────────────────────────────────
+// 검색
+// ──────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  if (searchQuery) {
+    currentCat = 'all';
+    renderCategories();
+  }
+  renderPhrases();
+});
+
+// ──────────────────────────────────────────────
+// 초기화
+// ──────────────────────────────────────────────
+renderCategories();
+renderPhrases();
+</script>
+</body>
+</html>
