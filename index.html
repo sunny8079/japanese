@@ -754,34 +754,34 @@ function speak(text, card) {
   card.classList.add('playing');
   showToast('🔊 재생 중...');
 
-  // 일본어 음성이 있으면 SpeechSynthesis 사용 (가장 안정적)
-  if (window.speechSynthesis && jaVoice) {
-    speakWithVoice(cleanText, card);
-  } else {
-    // 일본어 음성 없으면 Google TTS 시도
-    speakWithGoogle(cleanText, card);
-  }
-}
-
-function speakWithVoice(text, card) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = jaVoice;
-  utter.lang = 'ja-JP';
-  utter.rate = 0.75;  // 어르신 맞춤 느린 속도
-  utter.pitch = 1.0;
-
-  utter.onend = () => {
-    if (!isStopping) card.classList.remove('playing');
-  };
-  utter.onerror = () => {
-    if (isStopping) return;
-    // SpeechSynthesis 실패 → Google TTS로 대체
-    speakWithGoogle(text, card);
-  };
-  window.speechSynthesis.speak(utter);
+  // 1. Google Translate TTS (GTX 클라이언트) 우선 시도 (가장 자연스럽고 기기 무관 안정적)
+  speakWithGoogle(cleanText, card);
 }
 
 function speakWithGoogle(text, card) {
+  const encoded = encodeURIComponent(text);
+  const url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=gtx`;
+  
+  const audio = new Audio(url);
+  currentAudio = audio;
+  
+  audio.onended = () => {
+    if (!isStopping) card.classList.remove('playing');
+    currentAudio = null;
+  };
+  audio.onerror = () => {
+    if (isStopping) return;
+    currentAudio = null;
+    // gtx 실패 시 tw-ob 클라이언트로 2차 구글 TTS 시도
+    speakWithGoogleFallback(text, card);
+  };
+  audio.play().catch(() => {
+    if (isStopping) return;
+    speakWithGoogleFallback(text, card);
+  });
+}
+
+function speakWithGoogleFallback(text, card) {
   const encoded = encodeURIComponent(text);
   const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob`;
   
@@ -795,29 +795,51 @@ function speakWithGoogle(text, card) {
   audio.onerror = () => {
     if (isStopping) return;
     currentAudio = null;
-    // 둘 다 실패하면 내장 TTS라도 시도
-    if (window.speechSynthesis) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'ja-JP';
-      utter.rate = 0.75;
-      utter.onend = () => {
-        if (!isStopping) card.classList.remove('playing');
-      };
-      utter.onerror = () => {
-        card.classList.remove('playing');
-        showToast('⚠️ 음성을 재생할 수 없어요');
-      };
-      window.speechSynthesis.speak(utter);
-    } else {
-      card.classList.remove('playing');
-      showToast('⚠️ 음성을 재생할 수 없어요');
-    }
+    // 구글 TTS 모두 실패 시 기기 내장 TTS 시도
+    speakWithNativeTTS(text, card);
   };
-  
   audio.play().catch(() => {
     if (isStopping) return;
-    audio.onerror();
+    speakWithNativeTTS(text, card);
   });
+}
+
+function speakWithNativeTTS(text, card) {
+  if (!window.speechSynthesis) {
+    card.classList.remove('playing');
+    showToast('⚠️ 음성을 재생할 수 없어요');
+    return;
+  }
+  
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  utter.rate = 0.75;
+  utter.pitch = 1.0;
+
+  // 일본어 음성 매칭 시도 (기본 음성이 한국어인 상태에서 읽으면 발음이 비정상적으로 출력됨 방지)
+  let selectedVoice = jaVoice;
+  if (!selectedVoice) {
+    const voices = window.speechSynthesis.getVoices();
+    selectedVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.startsWith('ja') || v.lang === 'ja');
+  }
+
+  if (selectedVoice) {
+    utter.voice = selectedVoice;
+  } else {
+    // 일본어 음성이 기기에 설치되어 있지 않다면 어색한 한국어 엔진 출력을 차단하고 오류 안내
+    card.classList.remove('playing');
+    showToast('⚠️ 일본어 음성 엔진이 기기에 없습니다');
+    return;
+  }
+
+  utter.onend = () => {
+    if (!isStopping) card.classList.remove('playing');
+  };
+  utter.onerror = () => {
+    card.classList.remove('playing');
+    showToast('⚠️ 음성을 재생할 수 없어요');
+  };
+  window.speechSynthesis.speak(utter);
 }
 
 
