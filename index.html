@@ -1058,8 +1058,8 @@ function renderPhrases() {
   }
   empty.style.display = 'none';
 
-  // ── [제휴 광고 카드 삽입] ──
-  // 검색 중이 아닐 때만 카테고리별 맞춤형 제휴 카드를 삽입합니다.
+  // ── [제휴 광고 카드 삽입] ── (당장은 표시하지 않음)
+  /*
   if (!searchQuery) {
     const promo = getAffiliateCard(currentCat);
     if (promo) {
@@ -1074,6 +1074,7 @@ function renderPhrases() {
       grid.appendChild(promoCard);
     }
   }
+  */
 
   phrases.forEach(p => {
     const card = document.createElement('div');
