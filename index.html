@@ -1151,12 +1151,12 @@ function speakWithNativeTTS(text, card) {
 // 토스트
 // ──────────────────────────────────────────────
 let toastTimer;
-function showToast(msg) {
+function showToast(msg, duration = 2000) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
 // ──────────────────────────────────────────────
@@ -1411,7 +1411,7 @@ function initPWAInstall() {
     console.log('🎉 앱 설치 완료');
     installBtn.style.display = 'none';
     deferredPrompt = null;
-    showToast('✨ 홈 화면에 추가되었습니다!');
+    showToast('✨ 전체 앱(앱스) 목록에 추가되었습니다! 홈 화면에 배치하려면 앱 아이콘을 길게 눌러주세요.', 5000);
   });
 }
 
