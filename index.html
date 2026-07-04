@@ -446,13 +446,32 @@
       font-weight: 700;
     }
 
-    /* ── 홈 화면 추가 버튼 ── */
-    .pwa-install-btn {
+    /* ── PWA 설치 컨테이너 및 버튼 ── */
+    .pwa-install-container {
       position: absolute;
       top: 24px;
       right: 20px;
       z-index: 100;
       display: none; /* JS에서 노출 결정 */
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .pwa-safety-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #2E7D32; /* 차분한 초록색 */
+      background: #E8F5E9; /* 아주 연한 초록색 */
+      padding: 3px 8px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #C8E6C9;
+      box-shadow: 0 2px 6px rgba(46,125,50,0.05);
+    }
+    .pwa-install-btn {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--card);
@@ -584,11 +603,17 @@
     }
 
     @media (max-width: 768px) {
-      .pwa-install-btn {
+      .pwa-install-container {
         top: 16px;
         right: 16px;
+      }
+      .pwa-install-btn {
         font-size: 0.85rem;
         padding: 8px 14px;
+      }
+      .pwa-safety-badge {
+        font-size: 0.68rem;
+        padding: 2px 6px;
       }
     }
   </style>
@@ -604,7 +629,10 @@
 
 <!-- 헤더 -->
 <header>
-  <button id="pwaInstallBtn" class="pwa-install-btn">📲 홈 화면에 추가</button>
+  <div id="pwaInstallContainer" class="pwa-install-container">
+    <span class="pwa-safety-badge">🛡️ 안전한 웹앱</span>
+    <button id="pwaInstallBtn" class="pwa-install-btn">📲 홈 화면에 추가</button>
+  </div>
   <span class="header-emoji">🌸</span>
   <h1>엄마의 일본 여행 회화</h1>
 </header>
@@ -679,6 +707,10 @@
       <div class="ios-step">
         <div class="ios-step-num">3</div>
         <div class="ios-step-text"><strong>'홈 화면에 추가'</strong> 항목을 선택합니다.</div>
+      </div>
+      <div class="ios-safety-info" style="margin-top: 20px; padding: 10px 12px; background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: 8px; font-size: 0.88rem; color: #2E7D32; display: flex; align-items: center; gap: 6px;">
+        <span>🛡️</span>
+        <div style="font-weight: 500; line-height: 1.4;">이 웹앱은 개인정보를 수집하지 않으며 스마트폰 권한을 요구하지 않는 안전한 서비스입니다.</div>
       </div>
     </div>
     <div class="ios-modal-footer">
@@ -1368,6 +1400,7 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 // PWA 설치 버튼 & 모달 엘리먼트
+const installContainer = document.getElementById('pwaInstallContainer');
 const installBtn = document.getElementById('pwaInstallBtn');
 const iosModal = document.getElementById('iosInstallModal');
 const iosCloseBtn = document.getElementById('iosModalCloseBtn');
@@ -1396,20 +1429,20 @@ function initPWAInstall() {
     deferredPrompt = e;
     
     // 설치 버튼 노출 및 텍스트 설정
-    installBtn.style.display = 'inline-flex';
+    installContainer.style.display = 'flex';
     installBtn.textContent = '📲 홈 화면에 추가';
   });
 
   // 아이폰(iOS) 대응
   if (isIOS) {
-    installBtn.style.display = 'inline-flex';
+    installContainer.style.display = 'flex';
     installBtn.textContent = '📲 바로가기 추가';
   }
 
   // 설치 완료 이벤트 감지
   window.addEventListener('appinstalled', () => {
     console.log('🎉 앱 설치 완료');
-    installBtn.style.display = 'none';
+    installContainer.style.display = 'none';
     deferredPrompt = null;
     showToast('✨ 전체 앱(앱스) 목록에 추가되었습니다! 홈 화면에 배치하려면 앱 아이콘을 길게 눌러주세요.', 5000);
   });
@@ -1427,7 +1460,7 @@ installBtn.addEventListener('click', () => {
         console.log('👎 사용자가 앱 설치를 취소했습니다.');
       }
       deferredPrompt = null;
-      installBtn.style.display = 'none';
+      installContainer.style.display = 'none';
     });
   } else if (isIOS) {
     // 아이폰의 경우 안내 모달 노출
