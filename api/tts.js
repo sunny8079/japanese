@@ -1,4 +1,5 @@
 const url = require('url');
+const https = require('https');
 
 module.exports = async (req, res) => {
   // CORS Headers
@@ -152,36 +153,60 @@ module.exports = async (req, res) => {
     return;
   }
 
-  try {
-    // Call the official Google Cloud Text-to-Speech REST API
-    const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        input: { text },
-        voice: {
-          languageCode: 'ja-JP',
-          name: 'ja-JP-Wavenet-B', // Premium WaveNet neural voice (Female)
-          ssmlGender: 'FEMALE'
-        },
-        audioConfig: {
-          audioEncoding: 'MP3',
-          speakingRate: 0.75, // Slowed down by 0.75x for senior convenience
-          pitch: 0.0
-        }
-      })
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      res.status(response.status).json({ error: `Google TTS API Error: ${errText}` });
-      return;
+  const postData = JSON.stringify({
+    input: { text },
+    voice: {
+      languageCode: 'ja-JP',
+      name: 'ja-JP-Wavenet-B', // Premium WaveNet neural voice (Female)
+      ssmlGender: 'FEMALE'
+    },
+    audioConfig: {
+      audioEncoding: 'MP3',
+      speakingRate: 0.75, // Slowed down by 0.75x for senior convenience
+      pitch: 0.0
     }
+  });
 
-    const data = await response.json();
-    const audioContent = data.audioContent; // Base64 encoded audio string
+  const options = {
+    hostname: 'texttospeech.googleapis.com',
+    port: 443,
+    path: `/v1/text:synthesize?key=${apiKey}`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData)
+    }
+  };
+
+  try {
+    const audioContent = await new Promise((resolve, reject) => {
+      const gReq = https.request(options, (gRes) => {
+        let body = '';
+        gRes.setEncoding('utf8');
+        gRes.on('data', (chunk) => {
+          body += chunk;
+        });
+        gRes.on('end', () => {
+          if (gRes.statusCode !== 200) {
+            reject(new Error(`Google API responded with status ${gRes.statusCode}: ${body}`));
+            return;
+          }
+          try {
+            const data = JSON.parse(body);
+            resolve(data.audioContent);
+          } catch (e) {
+            reject(new Error(`Failed to parse JSON: ${e.message}`));
+          }
+        });
+      });
+
+      gReq.on('error', (e) => {
+        reject(e);
+      });
+
+      gReq.write(postData);
+      gReq.end();
+    });
 
     if (!audioContent) {
       res.status(500).json({ error: 'No audio content returned from Google TTS' });
