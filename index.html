@@ -7,6 +7,9 @@
   <meta name="description" content="일본 여행을 위한 기초 일본어 회화 가이드 - 상황별 단어와 문장" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#D84315" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
 
   <!-- 구글 애널리틱스 4 (GA4) 및 애드센스 (사이트 공개 시 주석을 풀고 G-XXXXXXXXXX 및 ca-pub-XXXX 등을 본인 코드로 채우세요) -->
   <!--
@@ -442,6 +445,152 @@
       color: #E65100;
       font-weight: 700;
     }
+
+    /* ── 홈 화면 추가 버튼 ── */
+    .pwa-install-btn {
+      position: absolute;
+      top: 24px;
+      right: 20px;
+      z-index: 100;
+      display: none; /* JS에서 노출 결정 */
+      align-items: center;
+      gap: 6px;
+      background: var(--card);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+    .pwa-install-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(216,67,21,0.2);
+    }
+    
+    /* ── iOS 설치 안내 모달 ── */
+    .ios-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease-out;
+    }
+    .ios-modal-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      overflow: hidden;
+      animation: slideUpModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ios-modal-header {
+      background: var(--accent);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .ios-modal-header h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .ios-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .ios-modal-close:hover {
+      opacity: 1;
+    }
+    .ios-modal-body {
+      padding: 24px;
+      color: var(--text);
+    }
+    .ios-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .ios-step:last-child {
+      margin-bottom: 0;
+    }
+    .ios-step-num {
+      background: rgba(216,67,21,0.1);
+      color: var(--accent);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .ios-step-text {
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+    .ios-step-text strong {
+      color: var(--accent);
+    }
+    .ios-modal-footer {
+      padding: 16px 24px 24px;
+      text-align: center;
+    }
+    .ios-confirm-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .ios-confirm-btn:hover {
+      background: var(--accent2);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUpModal {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .pwa-install-btn {
+        top: 16px;
+        right: 16px;
+        font-size: 0.85rem;
+        padding: 8px 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -455,6 +604,7 @@
 
 <!-- 헤더 -->
 <header>
+  <button id="pwaInstallBtn" class="pwa-install-btn">📲 홈 화면에 추가</button>
   <span class="header-emoji">🌸</span>
   <h1>엄마의 일본 여행 회화</h1>
 </header>
@@ -509,6 +659,33 @@
 
 <!-- 위로가기 버튼 -->
 <button class="scroll-top-btn" id="scrollTopBtn" aria-label="위로 가기" title="맨 위로">⬆</button>
+
+<!-- iOS 설치 안내 모달 -->
+<div class="ios-modal-overlay" id="iosInstallModal">
+  <div class="ios-modal-card">
+    <div class="ios-modal-header">
+      <h3>홈 화면에 바로가기 추가</h3>
+      <button class="ios-modal-close" id="iosModalCloseBtn" aria-label="닫기">×</button>
+    </div>
+    <div class="ios-modal-body">
+      <div class="ios-step">
+        <div class="ios-step-num">1</div>
+        <div class="ios-step-text">Safari 브라우저 하단의 <strong>공유 버튼(네모에 위 화살표 <span style="font-size:1.15rem;">⬆</span>)</strong>을 누릅니다.</div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">2</div>
+        <div class="ios-step-text">메뉴를 위로 올리면서 아래로 스크롤합니다.</div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">3</div>
+        <div class="ios-step-text"><strong>'홈 화면에 추가'</strong> 항목을 선택합니다.</div>
+      </div>
+    </div>
+    <div class="ios-modal-footer">
+      <button class="ios-confirm-btn" id="iosModalConfirmBtn">확인했습니다</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ──────────────────────────────────────────────
@@ -1180,6 +1357,101 @@ function checkKakaoTalk() {
 }
 
 checkKakaoTalk();
+
+// ──────────────────────────────────────────────
+// PWA (홈 화면 바로가기 추가) 스크립트
+// ──────────────────────────────────────────────
+let deferredPrompt = null;
+
+// OS 및 브라우저 감지
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+// PWA 설치 버튼 & 모달 엘리먼트
+const installBtn = document.getElementById('pwaInstallBtn');
+const iosModal = document.getElementById('iosInstallModal');
+const iosCloseBtn = document.getElementById('iosModalCloseBtn');
+const iosConfirmBtn = document.getElementById('iosModalConfirmBtn');
+
+// 서비스 워커 등록
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then((reg) => console.log('✅ ServiceWorker 등록 성공:', reg.scope))
+      .catch((err) => console.error('❌ ServiceWorker 등록 실패:', err));
+  });
+}
+
+function initPWAInstall() {
+  // 이미 설치되어 단독 앱 모드로 실행 중이면 버튼을 표시하지 않음
+  if (isStandalone) {
+    return;
+  }
+
+  // 안드로이드 / PC 크롬 등 브라우저의 설치 이벤트 감지
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // 기본 브라우저 배너 차단
+    e.preventDefault();
+    // 이벤트를 변수에 저장하여 나중에 호출
+    deferredPrompt = e;
+    
+    // 설치 버튼 노출 및 텍스트 설정
+    installBtn.style.display = 'inline-flex';
+    installBtn.textContent = '📲 홈 화면에 추가';
+  });
+
+  // 아이폰(iOS) 대응
+  if (isIOS) {
+    installBtn.style.display = 'inline-flex';
+    installBtn.textContent = '📲 바로가기 추가';
+  }
+
+  // 설치 완료 이벤트 감지
+  window.addEventListener('appinstalled', () => {
+    console.log('🎉 앱 설치 완료');
+    installBtn.style.display = 'none';
+    deferredPrompt = null;
+    showToast('✨ 홈 화면에 추가되었습니다!');
+  });
+}
+
+// 설치 버튼 클릭 시 동작
+installBtn.addEventListener('click', () => {
+  if (deferredPrompt) {
+    // 안드로이드 / PC 크롬 등 바로 실행 가능한 브라우저
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('👍 사용자가 앱 설치를 동의했습니다.');
+      } else {
+        console.log('👎 사용자가 앱 설치를 취소했습니다.');
+      }
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  } else if (isIOS) {
+    // 아이폰의 경우 안내 모달 노출
+    iosModal.style.display = 'flex';
+  } else {
+    // beforeinstallprompt가 아직 발생하지 않았거나 미지원 브라우저인 경우 브라우저 메뉴의 설치 방법 안내
+    showToast('💡 브라우저 메뉴[⋮]에서 \'홈 화면에 추가\'를 선택하세요.');
+  }
+});
+
+// iOS 모달 제어
+function closeIosModal() {
+  iosModal.style.display = 'none';
+}
+if (iosCloseBtn) iosCloseBtn.addEventListener('click', closeIosModal);
+if (iosConfirmBtn) iosConfirmBtn.addEventListener('click', closeIosModal);
+iosModal.addEventListener('click', (e) => {
+  if (e.target === iosModal) {
+    closeIosModal();
+  }
+});
+
+// PWA 초기화 실행
+initPWAInstall();
 </script>
 </body>
 </html>
