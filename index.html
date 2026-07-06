@@ -256,12 +256,14 @@
       border: none;
       color: #fff;
       padding: 14px 28px;
-      border-radius: 50px;
+      border-radius: 20px;
       font-size: 1.05rem;
       font-weight: 500;
       z-index: 999;
       transition: transform 0.3s ease;
-      white-space: nowrap;
+      text-align: center;
+      max-width: 90%;
+      width: max-content;
       box-shadow: 0 4px 16px rgba(21,101,192,0.3);
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -1511,6 +1513,8 @@ function closeModal(modal) {
 // 설치 버튼 클릭 시 동작
 installBtn.addEventListener('click', () => {
   if (deferredPrompt) {
+    // 보안 경고 관련 안내 토스트 노출
+    showToast('💡 보안 경고가 나타나면 [세부정보 더보기] ➡️ [무시하고 설치]를 눌러주세요.', 6000);
     // 즉시 브라우저 설치 팝업 표시
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
