@@ -1511,41 +1511,23 @@ function closeModal(modal) {
 // 설치 버튼 클릭 시 동작
 installBtn.addEventListener('click', () => {
   if (deferredPrompt) {
-    // 안드로이드 / PC 크롬 등의 경우, 설치 전 보안 가이드 모달 노출
-    openModal(androidModal);
+    // 즉시 브라우저 설치 팝업 표시
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('👍 사용자가 앱 설치를 동의했습니다.');
+      } else {
+        console.log('👎 사용자가 앱 설치를 취소했습니다.');
+      }
+      deferredPrompt = null;
+      installContainer.style.display = 'none';
+    });
   } else if (isIOS) {
     // 아이폰의 경우 안내 모달 노출
     openModal(iosModal);
   } else {
     // beforeinstallprompt가 아직 발생하지 않았거나 미지원 브라우저인 경우 브라우저 메뉴의 설치 방법 안내
     showToast('💡 브라우저 메뉴[⋮]에서 \'홈 화면에 추가\'를 선택하세요.');
-  }
-});
-
-// Android 모달 확인 시 실제 설치 진행
-if (androidConfirmBtn) {
-  androidConfirmBtn.addEventListener('click', () => {
-    closeModal(androidModal);
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('👍 사용자가 앱 설치를 동의했습니다.');
-        } else {
-          console.log('👎 사용자가 앱 설치를 취소했습니다.');
-        }
-        deferredPrompt = null;
-        installContainer.style.display = 'none';
-      });
-    }
-  });
-}
-
-// Android 모달 제어
-if (androidCloseBtn) androidCloseBtn.addEventListener('click', () => closeModal(androidModal));
-androidModal.addEventListener('click', (e) => {
-  if (e.target === androidModal) {
-    closeModal(androidModal);
   }
 });
 
