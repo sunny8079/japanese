@@ -291,6 +291,14 @@
       opacity: 1;
       pointer-events: auto;
     }
+    .toast.install-guide {
+      top: auto;
+      bottom: 270px;
+      transform: translate(-50%, 20px) scale(0.85);
+    }
+    .toast.install-guide.show {
+      transform: translate(-50%, 0) scale(1);
+    }
     .toast-confirm-btn {
       background: #ffffff;
       color: #1565c0;
@@ -1260,9 +1268,15 @@ function speakWithNativeTTS(text, card) {
 // 토스트
 // ──────────────────────────────────────────────
 let toastTimer;
-function showToast(msg, duration = 2000, showConfirm = false) {
+function showToast(msg, duration = 2000, showConfirm = false, isInstallGuide = false) {
   const t = document.getElementById('toast');
   t.innerHTML = '';
+  
+  if (isInstallGuide) {
+    t.classList.add('install-guide');
+  } else {
+    t.classList.remove('install-guide');
+  }
   
   const textSpan = document.createElement('span');
   textSpan.textContent = msg;
@@ -1277,6 +1291,7 @@ function showToast(msg, duration = 2000, showConfirm = false) {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       t.classList.remove('show');
+      t.classList.remove('install-guide');
       clearTimeout(toastTimer);
     });
     t.appendChild(btn);
@@ -1284,7 +1299,10 @@ function showToast(msg, duration = 2000, showConfirm = false) {
   
   t.classList.add('show');
   if (duration > 0) {
-    toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+    toastTimer = setTimeout(() => {
+      t.classList.remove('show');
+      t.classList.remove('install-guide');
+    }, duration);
   }
 }
 
@@ -1577,7 +1595,7 @@ installBtn.addEventListener('click', () => {
   if (deferredPrompt) {
     if (isMobile) {
       // 모바일의 경우 보안 경고 우회 안내 토스트 노출 (확인 버튼 있음, 25초)
-      showToast('💡 보안 경고가 나타나면 [세부정보 더보기] ➡️ [무시하고 설치]를 눌러주세요.', 25000, true);
+      showToast('💡 보안 경고가 나타나면 [세부정보 더보기] ➡️ [무시하고 설치]를 눌러주세요.', 25000, true, true);
     } else {
       // PC의 경우 주소창 우측 또는 상단 설치 유도 토스트 노출 (확인 버튼 없음, 8초)
       showToast('💡 주소창 우측 또는 상단에 표시되는 [설치] 버튼을 클릭해 주세요.', 8000);
