@@ -7,7 +7,7 @@
 ## 1. 사전 준비 (웹사이트 공개 배포)
 검색 엔진에 등록하기 전에 먼저 웹사이트가 인터넷상에 공개된 고유한 주소(URL)를 가지고 있어야 합니다.
 * **추천 배포 플랫폼**: **Vercel** (현재 프로젝트 구조가 Vercel Serverless Function `/api/tts.js`를 사용하므로 Vercel 배포를 강력히 권장합니다. 무료 플랜으로 충분합니다.)
-* **예시 배포 주소**: `https://your-project.vercel.app` 또는 개인 도메인
+* **예시 배포 주소**: `https://japanese-wine.vercel.app` 또는 개인 도메인
 
 ---
 
@@ -17,7 +17,7 @@
 
 1. **[구글 서치 콘솔](https://search.google.com/search-console/about) 접속 및 로그인**
 2. **속성 추가**:
-   * **URL 접두사** 방식 선택 -> 배포된 웹사이트 주소(예: `https://your-project.vercel.app`) 입력 후 [계속] 클릭.
+   * **URL 접두사** 방식 선택 -> 배포된 웹사이트 주소(예: `https://japanese-wine.vercel.app`) 입력 후 [계속] 클릭.
 3. **소유권 인증**:
    * 가장 간편한 **HTML 태그** 인증 방식 선택.
    * 제공되는 메타태그(예: `<meta name="google-site-verification" content="..." />`) 복사.
@@ -60,9 +60,9 @@
   User-agent: *
   Allow: /
   
-  Sitemap: https://your-project.vercel.app/sitemap.xml
+  Sitemap: https://japanese-wine.vercel.app/sitemap.xml
   ```
-  *(※ `https://your-project.vercel.app` 부분은 실제 배포된 주소로 변경하여 저장하세요.)*
+  *(※ `https://japanese-wine.vercel.app` 부분은 실제 배포된 주소로 변경하여 저장하세요.)*
 
 ### B. sitemap.xml (사이트 지도 파일)
 구글/네이버 로봇에게 웹사이트에 어떤 페이지들이 있는지 명세하는 파일입니다. 본 앱은 단일 페이지 웹(SPA) 구조이므로 홈 화면 하나만 등록해 주면 됩니다.
@@ -73,8 +73,8 @@
   <?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-      <loc>https://your-project.vercel.app/</loc>
-      <lastmod>2026-07-06</lastmod>
+      <loc>https://japanese-wine.vercel.app/</loc>
+      <lastmod>2026-07-15</lastmod>
       <changefreq>monthly</changefreq>
       <priority>1.0</priority>
     </url>
@@ -97,8 +97,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="일본어 여행 회화 가이드">
 <meta property="og:description" content="터치 한 번으로 원어민 발음이 재생되는 간편한 일본어 여행 회화 서비스">
-<meta property="og:image" content="https://your-project.vercel.app/icon-512.png">
-<meta property="og:url" content="https://your-project.vercel.app/">
+<meta property="og:image" content="https://japanese-wine.vercel.app/icon-512.png">
+<meta property="og:url" content="https://japanese-wine.vercel.app/">
 ```
 
 ---
