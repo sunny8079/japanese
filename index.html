@@ -484,20 +484,18 @@
       text-align: center;
     }
 
-    /* ── 네이티브 제휴 광고 카드 스타일 ── */
+        /* ── 네이티브 제휴 광고 카드 스타일 (상시 노출) ── */
     .promo-card {
       background: linear-gradient(135deg, #FFF8E1, #FFF3E0);
       border: 2px dashed #FFB74D;
       border-radius: var(--radius);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      padding: 22px 20px;
+      margin-bottom: 24px;
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow);
-      grid-column: 1 / -1; /* 그리드 전체 가로 스팬 */
       transition: all 0.25s;
+      text-align: left;
     }
     .promo-card:hover {
       border-color: var(--accent);
@@ -512,32 +510,53 @@
       padding: 4px 10px; border-radius: 50px;
     }
     .promo-title {
-      font-size: 1.2rem; font-weight: 700;
+      font-size: 1.18rem; font-weight: 700;
       color: #E65100; margin-bottom: 8px;
       display: flex; align-items: center; gap: 8px;
-      padding-right: 60px; /* 뱃지와 겹치지 않게 */
+      padding-right: 70px; /* 뱃지와 겹치지 않게 */
     }
     .promo-desc {
       font-size: 0.95rem; color: var(--text-sub);
-      line-height: 1.5; margin-bottom: 16px;
+      line-height: 1.5; margin-bottom: 14px;
     }
     .promo-btn {
       background: #E65100;
       color: #fff;
       border: none;
       border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 0.95rem; font-weight: 600;
+      padding: 11px 24px;
+      font-size: 0.96rem; font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      align-self: flex-start;
-      box-shadow: 0 2px 6px rgba(230,81,0,0.25);
+      box-shadow: 0 3px 10px rgba(230,81,0,0.25);
     }
     .promo-btn:hover {
-      background: #BF360C;
+      background: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(230,81,0,0.35);
+    }
+    .promo-disclaimer {
+      font-size: 0.76rem;
+      color: #8D6E63;
+      margin-top: 10px;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+    .dropdown-count {
+      margin-left: auto;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      background: rgba(0,0,0,0.05);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .dropdown-item.active .dropdown-count {
+      color: var(--accent);
+      background: rgba(216,67,21,0.15);
+      font-weight: 700;
     }
     @media (max-width: 768px) {
       .promo-card { padding: 20px; }
@@ -774,6 +793,14 @@
 
 <!-- 메인 콘텐츠 -->
 <main>
+  <!-- 쿠팡 파트너스 추천 준비물 카드 (상시 노출) -->
+  <div class="promo-card" id="alwaysPromoCard">
+    <span class="promo-badge">추천 준비물</span>
+    <div class="promo-title">🪙 일본 여행 필수 준비물 모음전</div>
+    <div class="promo-desc">동전 분할 지갑, 기내용 노이즈 캔슬링 이어폰, 초경량 미니 보조배터리 등 로켓배송 베스트셀러 모아보기</div>
+    <a href="https://link.coupang.com/a/ihDPrSJjNI" target="_blank" rel="noopener noreferrer" class="promo-btn">쿠팡 로켓배송 특가 보러가기 ➔</a>
+    <div class="promo-disclaimer">이 싸이트는 쿠팡파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 제공받습니다.</div>
+  </div>
   <!-- 구글 애드센스 본문 배너 (애드센스 통과 후 주석 해제하여 사용하세요) -->
   <!--
   <div class="adsense-banner">
@@ -1521,39 +1548,53 @@ function renderCategories() {
   const wrap = document.getElementById('categoryTabs');
   wrap.innerHTML = '';
 
-  // 1. [전체] 버튼
-  const allBtn = document.createElement('button');
-  allBtn.className = 'cat-btn' + (currentCat === 'all' ? ' active' : '');
-  allBtn.innerHTML = '<span class="cat-icon">🗂️</span>전체';
-  allBtn.addEventListener('click', () => selectCategory('all'));
-  wrap.appendChild(allBtn);
-
-  // 2. [드롭다운 버튼: 유용한 표현 ▾ / 인사 / 교통 / 숙박 ...]
-  // 드롭다운에 포함될 카테고리 목록
-  const dropdownCats = categories.filter(c => c.id !== 'all' && c.id !== 'shopping');
-  
-  // 현재 선택된 카테고리가 드롭다운 항목 중 하나인지 확인
-  const isDropdownActive = dropdownCats.some(c => c.id === currentCat);
-  const activeDropdownCat = dropdownCats.find(c => c.id === currentCat) || dropdownCats[0]; // 기본은 '유용한 표현'
-
   const dropdownContainer = document.createElement('div');
   dropdownContainer.className = 'dropdown-container';
 
+  // 현재 선택된 카테고리 정보
+  const activeCat = categories.find(c => c.id === currentCat);
+  const isAll = (currentCat === 'all');
+
+  // 버튼 라벨: 전체일 때는 '상황별 표현 선택 ▼', 특정 카테고리일 때는 해당 카테고리 표시
+  const btnLabel = isAll ? '상황별 표현 선택' : activeCat.label;
+  const btnIcon = isAll ? '🗂️' : activeCat.icon;
+
   const toggleBtn = document.createElement('button');
-  toggleBtn.className = 'cat-btn dropdown-toggle' + (isDropdownActive ? ' active' : '');
+  toggleBtn.className = 'cat-btn dropdown-toggle' + (!isAll ? ' active' : '');
   toggleBtn.innerHTML = `
-    <span class="cat-icon">${activeDropdownCat.icon}</span>
-    <span>${activeDropdownCat.label}</span>
+    <span class="cat-icon">${btnIcon}</span>
+    <span>${btnLabel}</span>
     <span class="arrow-icon">▼</span>
   `;
   
   const menu = document.createElement('div');
   menu.className = 'dropdown-menu';
 
-  dropdownCats.forEach(cat => {
+  // 1) 드롭다운 첫 번째 항목: [🗂️ 전체 보기 (106개)]
+  const totalCount = getAllPhrases().length;
+  const allItem = document.createElement('button');
+  allItem.className = 'dropdown-item' + (isAll ? ' active' : '');
+  allItem.innerHTML = `
+    <span class="cat-icon">🗂️</span>
+    <span>전체 보기</span>
+    <span class="dropdown-count">${totalCount}개</span>
+  `;
+  allItem.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownContainer.classList.remove('open');
+    selectCategory('all');
+  });
+  menu.appendChild(allItem);
+
+  // 2) 개별 카테고리 항목들 (유용한 표현, 인사, 식당, 쇼핑, 교통, 숙박 등 전부 포함!)
+  categories.filter(c => c.id !== 'all').forEach(cat => {
     const item = document.createElement('button');
     item.className = 'dropdown-item' + (currentCat === cat.id ? ' active' : '');
-    item.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.label}</span>`;
+    item.innerHTML = `
+      <span class="cat-icon">${cat.icon}</span>
+      <span>${cat.label}</span>
+      <span class="dropdown-count">${cat.phrases ? cat.phrases.length : 0}개</span>
+    `;
     item.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdownContainer.classList.remove('open');
@@ -1570,13 +1611,6 @@ function renderCategories() {
   dropdownContainer.appendChild(toggleBtn);
   dropdownContainer.appendChild(menu);
   wrap.appendChild(dropdownContainer);
-
-  // 3. [쇼핑 🛍️] 버튼 (수익화 특화)
-  const shopBtn = document.createElement('button');
-  shopBtn.className = 'cat-btn' + (currentCat === 'shopping' ? ' active' : '');
-  shopBtn.innerHTML = '<span class="cat-icon">🛍️</span>쇼핑';
-  shopBtn.addEventListener('click', () => selectCategory('shopping'));
-  wrap.appendChild(shopBtn);
 }
 
 // 드롭다운 외부 클릭 시 닫기
@@ -1645,21 +1679,7 @@ function renderPhrases() {
   }
   empty.style.display = 'none';
 
-  // ── [제휴 광고 카드 삽입] ──
-  if (!searchQuery) {
-    const promo = getAffiliateCard(currentCat);
-    if (promo) {
-      const promoCard = document.createElement('div');
-      promoCard.className = 'promo-card';
-      promoCard.innerHTML = `
-        <span class="promo-badge">${promo.badge}</span>
-        <div class="promo-title">${promo.title}</div>
-        <div class="promo-desc">${promo.desc}</div>
-        <a href="${promo.url}" target="_blank" rel="noopener noreferrer" class="promo-btn">${promo.btnText}</a>
-      `;
-      grid.appendChild(promoCard);
-    }
-  }
+  // (상단 추천 준비물 카드는 항상 노출되도록 상단에 배치됨)
 
   phrases.forEach(p => {
     const card = document.createElement('div');
