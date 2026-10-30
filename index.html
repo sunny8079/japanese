@@ -257,6 +257,94 @@
     }
     .section-title span.icon { font-size: 1.8rem; }
 
+    /* ── 피드 중간 슬림 추천 배너 (점선 제거, 컴팩트 인피드) ── */
+    .slim-promo-banner {
+      grid-column: 1 / -1;
+      background: #FFF8F0;
+      border: 1px solid rgba(230, 81, 0, 0.15);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      margin: 6px 0;
+      transition: all 0.2s ease;
+    }
+    .slim-promo-banner:hover {
+      border-color: rgba(230, 81, 0, 0.35);
+      box-shadow: 0 4px 16px rgba(230, 81, 0, 0.08);
+      transform: translateY(-1px);
+    }
+    .slim-promo-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .slim-promo-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .slim-promo-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .slim-promo-badge {
+      background: rgba(230, 81, 0, 0.12);
+      color: #E65100;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 50px;
+    }
+    .slim-promo-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #D84315;
+    }
+    .slim-promo-desc {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .slim-promo-disclaimer {
+      font-size: 0.72rem;
+      color: #8D6E63;
+      opacity: 0.85;
+      line-height: 1.3;
+    }
+    .slim-promo-btn {
+      background: #E65100;
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 50px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(230, 81, 0, 0.25);
+      text-align: center;
+    }
+    .slim-promo-btn:hover {
+      background: #BF360C;
+      transform: scale(1.02);
+    }
+    @media (max-width: 600px) {
+      .slim-promo-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .slim-promo-btn {
+        width: 100%;
+        padding: 9px 16px;
+      }
+    }
+
     /* ── 카드 그리드 ── */
     .phrases-grid {
       display: grid;
@@ -793,14 +881,7 @@
 
 <!-- 메인 콘텐츠 -->
 <main>
-  <!-- 쿠팡 파트너스 추천 준비물 카드 (상시 노출) -->
-  <div class="promo-card" id="alwaysPromoCard">
-    <span class="promo-badge">추천 준비물</span>
-    <div class="promo-title">🪙 일본 여행 필수 준비물 모음전</div>
-    <div class="promo-desc">동전 분할 지갑, 기내용 노이즈 캔슬링 이어폰, 초경량 미니 보조배터리 등 로켓배송 베스트셀러 모아보기</div>
-    <a href="https://link.coupang.com/a/ihDPrSJjNI" target="_blank" rel="noopener noreferrer" class="promo-btn">쿠팡 로켓배송 특가 보러가기 ➔</a>
-    <div class="promo-disclaimer">이 싸이트는 쿠팡파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 제공받습니다.</div>
-  </div>
+
   <!-- 구글 애드센스 본문 배너 (애드센스 통과 후 주석 해제하여 사용하세요) -->
   <!--
   <div class="adsense-banner">
@@ -1658,6 +1739,27 @@ function getAffiliateCard(catId) {
   return ads[catId] || null;
 }
 
+function createPromoBanner() {
+  const banner = document.createElement('div');
+  banner.className = 'slim-promo-banner';
+  banner.innerHTML = `
+    <div class="slim-promo-inner">
+      <div class="slim-promo-info">
+        <div class="slim-promo-head">
+          <span class="slim-promo-badge">추천 팁</span>
+          <span class="slim-promo-title">🪙 일본 여행 필수 준비물 모음전</span>
+        </div>
+        <div class="slim-promo-desc">동전 분할 지갑, 기내용 노이즈 캔슬링 이어폰, 초경량 미니 보조배터리 등 로켓배송 베스트셀러</div>
+        <div class="slim-promo-disclaimer">이 싸이트는 쿠팡파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 제공받습니다.</div>
+      </div>
+      <a href="https://link.coupang.com/a/ihDPrSJjNI" target="_blank" rel="noopener noreferrer" class="slim-promo-btn">
+        특가 보기 ➔
+      </a>
+    </div>
+  `;
+  return banner;
+}
+
 function renderPhrases() {
   const grid = document.getElementById('phrasesGrid');
   const empty = document.getElementById('emptyState');
@@ -1679,9 +1781,7 @@ function renderPhrases() {
   }
   empty.style.display = 'none';
 
-  // (상단 추천 준비물 카드는 항상 노출되도록 상단에 배치됨)
-
-  phrases.forEach(p => {
+  phrases.forEach((p, index) => {
     const card = document.createElement('div');
     card.className = 'phrase-card';
     card.innerHTML =
@@ -1698,7 +1798,18 @@ function renderPhrases() {
       speak(ttsText, card);
     });
     grid.appendChild(card);
+
+    // 슬림 배너 삽입:
+    // 4번째 표현(index 3) 뒤에 자연스럽게 삽입하고, 전체(106개)처럼 긴 목록일 경우 매 14개마다 추가 삽입
+    if (index === 3 || (index > 3 && (index - 3) % 14 === 0 && index < phrases.length - 1)) {
+      grid.appendChild(createPromoBanner());
+    }
   });
+
+  // 표현이 4개 미만인 경우 맨 뒤에 슬림 배너 삽입
+  if (phrases.length < 4 && phrases.length > 0) {
+    grid.appendChild(createPromoBanner());
+  }
 }
 
 // ──────────────────────────────────────────────
