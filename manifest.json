@@ -1,7 +1,7 @@
 {
-  "name": "엄마의 일본 여행 회화",
-  "short_name": "일본 여행 회화",
-  "description": "일본 여행을 위한 기초 일본어 회화 가이드 - 상황별 단어와 문장",
+  "name": "왕초보 일본어 기초 여행회화",
+  "short_name": "왕초보 일본어",
+  "description": "왕초보를 위한 일본 여행 필수 기초 회화 106개 - 상황별 단어와 문장 음성 듣기",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#FFF9F0",
