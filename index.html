@@ -75,41 +75,64 @@
     @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-50px,-30px); } }
     @keyframes drift3 { from { transform: translate(-50%,-50%); } to { transform: translate(-55%,-45%); } }
 
-    /* ── 헤더 ── */
+    /* ── 헤더 (초슬림 & 컴팩트) ── */
     header {
       position: relative; z-index: 10;
       text-align: center;
-      padding: 48px 20px 32px;
+      padding: 20px 16px 10px;
     }
-    .header-emoji { font-size: 3.5rem; display: block; margin-bottom: 12px; animation: bounce 2s ease-in-out infinite; }
-    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
     header h1 {
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-size: clamp(1.35rem, 4.2vw, 1.85rem);
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 10px;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    header p {
-      color: var(--text-sub);
-      font-size: 1.15rem;
-      font-weight: 500;
+    .header-emoji {
+      font-size: 1.5rem;
+      display: inline-block;
+      vertical-align: middle;
     }
 
-    /* ── 검색 ── */
+    /* ── 컴팩트 슬림 팁 배너 ── */
+    .tip-banner {
+      position: relative; z-index: 10;
+      max-width: 500px; margin: 0 auto 14px;
+      padding: 0 16px;
+      text-align: center;
+    }
+    .tip-inner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #FFF3E0;
+      border: 1px solid #FFE0B2;
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #E65100;
+      box-shadow: 0 2px 8px rgba(230,81,0,0.06);
+    }
+
+    /* ── 검색창 ── */
     .search-wrap {
       position: relative; z-index: 10;
-      max-width: 480px; margin: 0 auto 32px;
-      padding: 0 20px;
+      max-width: 480px; margin: 0 auto 16px;
+      padding: 0 16px;
     }
     .search-wrap input {
       width: 100%;
       background: var(--card);
       border: 2px solid var(--border);
       border-radius: 50px;
-      padding: 16px 22px 16px 52px;
+      padding: 13px 20px 13px 46px;
       color: var(--text);
-      font-size: 1.1rem;
+      font-size: 1.0rem;
       font-family: inherit;
       outline: none;
       transition: border-color 0.3s;
@@ -118,42 +141,107 @@
     .search-wrap input:focus { border-color: var(--accent); }
     .search-wrap input::placeholder { color: var(--text-sub); }
     .search-icon {
-      position: absolute; left: 36px; top: 50%; transform: translateY(-50%);
-      font-size: 1.3rem; pointer-events: none;
+      position: absolute; left: 32px; top: 50%; transform: translateY(-50%);
+      font-size: 1.2rem; pointer-events: none;
     }
 
-    /* ── 카테고리 탭 ── */
+    /* ── 카테고리 탭 & 드롭다운 ── */
     .categories {
-      position: relative; z-index: 10;
-      display: flex; flex-wrap: wrap; gap: 10px;
+      position: relative; z-index: 20;
+      display: flex; gap: 8px;
       justify-content: center;
-      padding: 0 20px 32px;
-      max-width: 900px; margin: 0 auto;
+      align-items: center;
+      padding: 0 16px 20px;
+      max-width: 600px; margin: 0 auto;
     }
     .cat-btn {
-      display: flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 6px;
       background: var(--card);
       border: 2px solid var(--border);
       border-radius: 50px;
-      padding: 14px 22px;
+      padding: 10px 18px;
       color: var(--text-sub);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 500;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: all 0.2s;
       white-space: nowrap;
       box-shadow: var(--shadow);
+      user-select: none;
     }
-    .cat-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+    .cat-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
     .cat-btn.active {
       background: var(--accent);
       border-color: transparent;
       color: #fff;
-      box-shadow: 0 4px 20px rgba(216,67,21,0.35);
-      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(216,67,21,0.3);
+      font-weight: 700;
     }
-    .cat-icon { font-size: 1.3rem; }
+    .cat-icon { font-size: 1.15rem; }
+
+    /* 드롭다운 버튼 & 메뉴 */
+    .dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle .arrow-icon {
+      font-size: 0.75rem;
+      margin-left: 2px;
+      transition: transform 0.2s ease;
+    }
+    .dropdown-container.open .dropdown-toggle .arrow-icon {
+      transform: rotate(180deg);
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      background: #FFFFFF;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      min-width: 190px;
+      max-height: 380px;
+      overflow-y: auto;
+      z-index: 1000;
+      padding: 8px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .dropdown-container.open .dropdown-menu {
+      display: block;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .dropdown-item:hover {
+      background: var(--card-hover);
+      color: var(--accent);
+    }
+    .dropdown-item.active {
+      background: rgba(216, 67, 21, 0.12);
+      color: var(--accent);
+      font-weight: 700;
+    }
 
     /* ── 콘텐츠 영역 ── */
     main {
@@ -333,22 +421,7 @@
       .speak-btn { width: 48px; height: 48px; font-size: 1.3rem; }
     }
 
-    /* ── 상단 배너 ── */
-    .tip-banner {
-      position: relative; z-index: 10;
-      max-width: 700px; margin: 0 auto 28px;
-      padding: 0 20px;
-    }
-    .tip-inner {
-      background: #FFF3E0;
-      border: 2px solid #FFB74D;
-      border-radius: 14px;
-      padding: 16px 20px;
-      font-size: 1.05rem;
-      font-weight: 500;
-      color: #E65100;
-      display: flex; align-items: center; gap: 12px;
-    }
+    
 
     /* ── 카드 개수 뱃지 ── */
     .count-badge {
@@ -678,20 +751,15 @@
   <div class="orb orb3"></div>
 </div>
 
-<!-- 헤더 -->
+<!-- 헤더 (초슬림 & 컴팩트) -->
 <header>
-  <div id="pwaInstallContainer" class="pwa-install-container">
-    <span class="pwa-safety-badge">🛡️ 안전한 웹앱</span>
-    <button id="pwaInstallBtn" class="pwa-install-btn">📲 홈 화면에 추가</button>
-  </div>
-  <span class="header-emoji">🌸</span>
-  <h1>왕초보 일본어 여행회화</h1>
+  <h1><span class="header-emoji">🌸</span>왕초보 일본어 여행회화</h1>
 </header>
 
-<!-- 팁 배너 -->
+<!-- 컴팩트 슬림 팁 배너 -->
 <div class="tip-banner">
   <div class="tip-inner">
-    💡 카드를 클릭하면 일본어 발음이 자동으로 재생됩니다. 크게 따라해 보세요!
+    💡 카드를 누르면 원어민 발음이 재생됩니다
   </div>
 </div>
 
@@ -1436,58 +1504,121 @@ function showToast(msg, duration = 2000, showConfirm = false, isInstallGuide = f
 // ──────────────────────────────────────────────
 // 렌더
 // ──────────────────────────────────────────────
+function selectCategory(catId) {
+  if (currentCat !== catId) {
+    if (history.pushState) {
+      history.pushState({ catId: catId }, '');
+    }
+    currentCat = catId;
+    searchQuery = '';
+    document.getElementById('searchInput').value = '';
+    renderCategories();
+    renderPhrases();
+  }
+}
+
 function renderCategories() {
   const wrap = document.getElementById('categoryTabs');
   wrap.innerHTML = '';
-  categories.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'cat-btn' + (currentCat === cat.id ? ' active' : '');
-    btn.dataset.id = cat.id;
-    btn.innerHTML = '<span class="cat-icon">' + cat.icon + '</span>' + cat.label;
-    btn.addEventListener('click', () => {
-      if (currentCat !== cat.id) {
-        if (history.pushState) {
-          history.pushState({ catId: cat.id }, '');
-        }
-        currentCat = cat.id;
-        searchQuery = '';
-        document.getElementById('searchInput').value = '';
-        renderCategories();
-        renderPhrases();
-      }
+
+  // 1. [전체] 버튼
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-btn' + (currentCat === 'all' ? ' active' : '');
+  allBtn.innerHTML = '<span class="cat-icon">🗂️</span>전체';
+  allBtn.addEventListener('click', () => selectCategory('all'));
+  wrap.appendChild(allBtn);
+
+  // 2. [드롭다운 버튼: 유용한 표현 ▾ / 인사 / 교통 / 숙박 ...]
+  // 드롭다운에 포함될 카테고리 목록
+  const dropdownCats = categories.filter(c => c.id !== 'all' && c.id !== 'shopping');
+  
+  // 현재 선택된 카테고리가 드롭다운 항목 중 하나인지 확인
+  const isDropdownActive = dropdownCats.some(c => c.id === currentCat);
+  const activeDropdownCat = dropdownCats.find(c => c.id === currentCat) || dropdownCats[0]; // 기본은 '유용한 표현'
+
+  const dropdownContainer = document.createElement('div');
+  dropdownContainer.className = 'dropdown-container';
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'cat-btn dropdown-toggle' + (isDropdownActive ? ' active' : '');
+  toggleBtn.innerHTML = `
+    <span class="cat-icon">${activeDropdownCat.icon}</span>
+    <span>${activeDropdownCat.label}</span>
+    <span class="arrow-icon">▼</span>
+  `;
+  
+  const menu = document.createElement('div');
+  menu.className = 'dropdown-menu';
+
+  dropdownCats.forEach(cat => {
+    const item = document.createElement('button');
+    item.className = 'dropdown-item' + (currentCat === cat.id ? ' active' : '');
+    item.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.label}</span>`;
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownContainer.classList.remove('open');
+      selectCategory(cat.id);
     });
-    wrap.appendChild(btn);
+    menu.appendChild(item);
   });
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownContainer.classList.toggle('open');
+  });
+
+  dropdownContainer.appendChild(toggleBtn);
+  dropdownContainer.appendChild(menu);
+  wrap.appendChild(dropdownContainer);
+
+  // 3. [쇼핑 🛍️] 버튼 (수익화 특화)
+  const shopBtn = document.createElement('button');
+  shopBtn.className = 'cat-btn' + (currentCat === 'shopping' ? ' active' : '');
+  shopBtn.innerHTML = '<span class="cat-icon">🛍️</span>쇼핑';
+  shopBtn.addEventListener('click', () => selectCategory('shopping'));
+  wrap.appendChild(shopBtn);
 }
 
+// 드롭다운 외부 클릭 시 닫기
+document.addEventListener('click', (e) => {
+  const openDropdown = document.querySelector('.dropdown-container.open');
+  if (openDropdown && !openDropdown.contains(e.target)) {
+    openDropdown.classList.remove('open');
+  }
+});
+
 // ──────────────────────────────────────────────
-// 제휴 광고 데이터 매핑
+// 제휴 광고 데이터 매핑 (쿠팡 추천 준비물 모음전)
 // ──────────────────────────────────────────────
 function getAffiliateCard(catId) {
   const ads = {
+    shopping: {
+      badge: '추천 준비물',
+      title: '🪙 일본 여행 필수 준비물 모음전',
+      desc: '동전 분할 지갑, 기내용 노이즈 캔슬링 이어폰, 초경량 미니 보조배터리 등 로켓배송 베스트셀러 모아보기',
+      btnText: '쿠팡 로켓배송 특가 보러가기 ➔',
+      url: 'https://link.coupang.com/'
+    },
+    money: {
+      badge: '추천 준비물',
+      title: '🪙 일본 여행 필수 준비물 모음전',
+      desc: '동전 분할 지갑, 기내용 노이즈 캔슬링 이어폰, 초경량 미니 보조배터리 등 로켓배송 베스트셀러 모아보기',
+      btnText: '쿠팡 로켓배송 특가 보러가기 ➔',
+      url: 'https://link.coupang.com/'
+    },
     transport: {
+      badge: '추천 교통권',
       title: '🚃 일본 지하철/신칸센 패스 최저가 예매',
-      desc: '도쿄 메트로 패스, 오사카 주유패스, JR 패스 등 여행에 필수적인 일본 교통권을 가장 할인된 금액으로 준비해 보세요!',
-      btnText: '교통 패스 할인가로 구매하기 (클룩 제휴)',
+      desc: '도쿄 메트로 패스, 오사카 주유패스 등 여행에 필수적인 일본 교통권을 할인된 금액으로 준비해 보세요!',
+      btnText: '교통 패스 할인가로 구매하기 (클룩 제휴) ➔',
       url: 'https://www.klook.com/ko/select-destination/japan-travel-passes/'
     },
     hotel: {
+      badge: '추천 숙소',
       title: '🏨 일본 인기 도시 실시간 숙박 특가',
       desc: '도쿄, 오사카, 후쿠오카, 삿포로 등 아고다에서 제휴 특별 할인가로 최고의 호텔/료칸을 지금 예약하세요.',
-      btnText: '실시간 아고다 호텔 예약 바로가기',
+      btnText: '실시간 아고다 호텔 예약 바로가기 ➔',
       url: 'https://www.agoda.com/ko-kr/country/japan.html'
-    },
-    shopping: {
-      title: '📶 로밍보다 싼 일본 무제한 eSIM 1초 개통',
-      desc: '유심 갈아 끼울 필요 없이 일본 현지 공항에 내리자마자 바로 개통되는 가장 빠르고 편리한 데이터 eSIM 상품입니다.',
-      btnText: 'eSIM 최저가 알아보기 (클룩 제휴)',
-      url: 'https://www.klook.com/ko/activity/82437-japan-esim/'
-    },
-    money: {
-      title: '🪙 일본 여행 필수 준비물 모음전',
-      desc: '여권 파우치, 110V 돼지코 어댑터, 동전 전용 지갑 등 일본 여행을 더욱 편리하게 해주는 준비물들을 로켓배송으로 만나보세요.',
-      btnText: '여행 필수품 최저가 구매 (쿠팡 제휴)',
-      url: 'https://link.coupang.com/'
     }
   };
   return ads[catId] || null;
@@ -1514,15 +1645,14 @@ function renderPhrases() {
   }
   empty.style.display = 'none';
 
-  // ── [제휴 광고 카드 삽입] ── (당장은 표시하지 않음)
-  /*
+  // ── [제휴 광고 카드 삽입] ──
   if (!searchQuery) {
     const promo = getAffiliateCard(currentCat);
     if (promo) {
       const promoCard = document.createElement('div');
       promoCard.className = 'promo-card';
       promoCard.innerHTML = `
-        <span class="promo-badge">추천 제휴</span>
+        <span class="promo-badge">${promo.badge}</span>
         <div class="promo-title">${promo.title}</div>
         <div class="promo-desc">${promo.desc}</div>
         <a href="${promo.url}" target="_blank" rel="noopener noreferrer" class="promo-btn">${promo.btnText}</a>
@@ -1530,7 +1660,6 @@ function renderPhrases() {
       grid.appendChild(promoCard);
     }
   }
-  */
 
   phrases.forEach(p => {
     const card = document.createElement('div');
@@ -1683,20 +1812,20 @@ function initPWAInstall() {
     deferredPrompt = e;
     
     // 설치 버튼 노출 및 텍스트 설정
-    installContainer.style.display = 'flex';
+    if (installContainer) installContainer.style.display = 'flex';
     installBtn.textContent = '📲 홈 화면에 추가';
   });
 
   // 아이폰(iOS) 대응
   if (isIOS) {
-    installContainer.style.display = 'flex';
+    if (installContainer) installContainer.style.display = 'flex';
     installBtn.textContent = '📲 바로가기 추가';
   }
 
   // 설치 완료 이벤트 감지
   window.addEventListener('appinstalled', () => {
     console.log('🎉 앱 설치 완료');
-    installContainer.style.display = 'none';
+    if (installContainer) installContainer.style.display = 'none';
     deferredPrompt = null;
     showToast('✨ 전체 앱(앱스) 목록에 추가되었습니다! 홈 화면에 배치하려면 앱 아이콘을 길게 눌러주세요.', 5000);
   });
@@ -1718,7 +1847,7 @@ function closeModal(modal) {
 }
 
 // 설치 버튼 클릭 시 동작
-installBtn.addEventListener('click', () => {
+if (installBtn) installBtn.addEventListener('click', () => {
   if (deferredPrompt) {
     if (isMobile) {
       // 모바일의 경우 보안 경고 우회 안내 토스트 노출 (확인 버튼 있음, 25초)
@@ -1736,7 +1865,7 @@ installBtn.addEventListener('click', () => {
         console.log('👎 사용자가 앱 설치를 취소했습니다.');
       }
       deferredPrompt = null;
-      installContainer.style.display = 'none';
+      if (installContainer) installContainer.style.display = 'none';
     });
   } else if (isIOS) {
     // 아이폰의 경우 안내 모달 노출
